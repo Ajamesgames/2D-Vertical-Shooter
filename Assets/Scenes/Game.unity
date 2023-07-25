@@ -209,7 +209,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 488946170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.11, y: -3.86, z: 0}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -227,7 +227,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c865481b27c7da74b9a8b7aab67df9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerSpeed: 5
+  _playerSpeed: 10
+  _fireRate: 0.2
+  _canFire: 0
+  _laserPrefab: {fileID: 6141348107821834088, guid: d91208e70b85eff4fade9d114700d1d8,
+    type: 3}
 --- !u!1 &647877476
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +360,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0.20178194, b: 0.5188679, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
