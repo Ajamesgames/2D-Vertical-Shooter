@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
     private Vector3 _laserOffSet = new Vector3(0, 0.8f, 0);
+    [SerializeField]
+    private int _lives = 3;
 
 
     // Start is called before the first frame update
@@ -38,6 +40,16 @@ public class Player : MonoBehaviour
 
         
 
+    }
+
+    public void Damage()
+    {
+        _lives -= 1;
+
+        if(_lives == 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 
