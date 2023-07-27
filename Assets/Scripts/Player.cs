@@ -15,15 +15,15 @@ public class Player : MonoBehaviour
     private Vector3 _laserOffSet = new Vector3(0, 0.8f, 0);
     [SerializeField]
     private int _lives = 3;
+    private SpawnManager _spawnManager;
 
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0, -2f, 0); //Player starts at starting position
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
-
-        
     }
 
     // Update is called once per frame
@@ -48,6 +48,9 @@ public class Player : MonoBehaviour
 
         if(_lives == 0)
         {
+            //_stopSpawning = true
+            _spawnManager.OnPlayerDeath();
+            //tells spawnmanager to stop spawning
             Destroy(this.gameObject);
         }
     }
