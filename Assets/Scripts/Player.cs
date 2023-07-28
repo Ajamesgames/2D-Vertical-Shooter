@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
     [SerializeField]
     private GameObject _laserPrefab;
-    private Vector3 _laserOffSet = new Vector3(0, 0.8f, 0);
+    private Vector3 _laserOffSet = new Vector3(0, 1.15f, 0);
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
