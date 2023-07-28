@@ -102,13 +102,13 @@ public class Player : MonoBehaviour
         //else if player position on x is less than -11
         //player wraps to positon 11 on x
 
-        if (transform.position.x > 11)
+        if (transform.position.x > 7.5f)
         {
-            transform.position = new Vector3(-11, transform.position.y, 0);
+            transform.position = new Vector3(7.5f, transform.position.y, 0);
         }
-        else if (transform.position.x < -11)
+        else if (transform.position.x < -7.5f)
         {
-            transform.position = new Vector3(11, transform.position.y, 0);
+            transform.position = new Vector3(-7.5f, transform.position.y, 0);
         }
 
     }
