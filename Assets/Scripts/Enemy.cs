@@ -7,15 +7,6 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _enemySpeed = 4f;
 
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         EnemyMovement();
@@ -27,12 +18,12 @@ public class Enemy : MonoBehaviour
 
         if (transform.position.y < -6)
         {
-            float randomX = Random.Range(-8.5f, 8.5f);
+            float randomX = Random.Range(-7.25f, 7.25f);
             //random x range variable
 
             transform.position = new Vector3(randomX, 7.5f, 0);
         }
-        //if enemy goes under 6y, teleport to random x range at 7.5y
+        //if enemy goes under 6y, teleport to x boundary range at 7.5y
 
     }
 
@@ -55,7 +46,7 @@ public class Enemy : MonoBehaviour
             Destroy(other.gameObject);
             Destroy(this.gameObject);
         }
-        //collision information
+        //collision information with player and laser
 
     }
 

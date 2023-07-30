@@ -16,13 +16,22 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
+    [SerializeField]
+    private bool _isDoubleShotActive = false;
+    [SerializeField]
+    private GameObject _doubleShotPrefab;
+    [SerializeField]
+    private bool _isTripleShotActive = false;
+    [SerializeField]
+    private GameObject _tripleShotPrefab;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(0, -2f, 0); //Player starts at starting position
+        transform.position = new Vector3(0, -2f, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        
 
     }
 
@@ -36,39 +45,8 @@ public class Player : MonoBehaviour
                 FireLaser();
                 //fire laser with spacebar with cooldown
             }
-        
-
-        
 
     }
-
-    public void Damage()
-    {
-        _lives -= 1;
-
-        if(_lives == 0)
-        {
-            //_stopSpawning = true
-            _spawnManager.OnPlayerDeath();
-            //tells spawnmanager to stop spawning
-            Destroy(this.gameObject);
-        }
-    }
-
-
-
-
-
-    void FireLaser()
-    {
-        _canFire = Time.time + _fireRate;
-        //adds fire rate to time value
-        Instantiate(_laserPrefab, (transform.position + _laserOffSet), Quaternion.identity);
-        //fire laser with firerate
-
-    }
-
-
 
     void CalculateMovement()
     {
@@ -76,31 +54,17 @@ public class Player : MonoBehaviour
         float veritcalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, veritcalInput, 0);
 
-        //transform.Translate(Vector3.right * Time.deltaTime * _playerSpeed * horizontalInput);
-        //transform.Translate(Vector3.up * Time.deltaTime * _playerSpeed * veritcalInput);
-
         transform.Translate(direction * Time.deltaTime * _playerSpeed);
-        //player movement
+        //player movement speed and control
 
-        //if player position on y is greater than 5
-        //player position = 5 on y
-        //else if player position is less than -4
-        //player position = -4 on y
-
-
-        if (transform.position.y > 5)
+        if (transform.position.y > 4.5f)
         {
-            transform.position = new Vector3(transform.position.x, 5, 0);
+            transform.position = new Vector3(transform.position.x, 4.5f, 0);
         }
-        else if (transform.position.y < -4)
+        else if (transform.position.y < -5)
         {
-            transform.position = new Vector3(transform.position.x, -4, 0);
+            transform.position = new Vector3(transform.position.x, -5, 0);
         }
-
-        //if player position on x is greater than 11
-        //player wraps to position -11 on x
-        //else if player position on x is less than -11
-        //player wraps to positon 11 on x
 
         if (transform.position.x > 7.5f)
         {
@@ -110,10 +74,53 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(-7.5f, transform.position.y, 0);
         }
+        //player movement boundries
+    }
+
+    void FireLaser()
+    {
+        _canFire = Time.time + _fireRate; //adds fire rate to time value
+
+        if (_isDoubleShotActive == true)
+        {
+            Instantiate(_doubleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else if (_isTripleShotActive == true)
+        {
+            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(_laserPrefab, (transform.position + _laserOffSet), Quaternion.identity);
+        }
+             
 
     }
 
+    public void Damage()
+    {
+        _lives -= 1;
 
+        if (_lives == 0)
+        {
+            //_stopSpawning = true
+            _spawnManager.OnPlayerDeath();
+            //tells spawnmanager to stop spawning
+            Destroy(this.gameObject);
+        }
+    }
+
+    public void LaserPowerupActive()
+    {
+        _isDoubleShotActive = true;
+        StartCoroutine(PowerupCountdownRoutine());
+    }
+
+    IEnumerator PowerupCountdownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isDoubleShotActive = false;
+    }
 
 
 
