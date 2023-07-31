@@ -24,6 +24,10 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     [SerializeField]
     private GameObject _tripleShotPrefab;
+    [SerializeField]
+    private bool _isSpeedBoostActive = false;
+    [SerializeField]
+    private float _speedPowerupSpeed = 20f;
 
 
     // Start is called before the first frame update
@@ -54,8 +58,15 @@ public class Player : MonoBehaviour
         float veritcalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, veritcalInput, 0);
 
-        transform.Translate(direction * Time.deltaTime * _playerSpeed);
-        //player movement speed and control
+        if(_isSpeedBoostActive == true)
+        {
+            transform.Translate(direction * Time.deltaTime * _speedPowerupSpeed);
+        }
+        else
+        {
+            transform.Translate(direction * Time.deltaTime * _playerSpeed);
+        }
+        
 
         if (transform.position.y > 4.5f)
         {
@@ -116,12 +127,25 @@ public class Player : MonoBehaviour
         StartCoroutine(PowerupCountdownRoutine());
     }
 
+    public void SpeedPowerupActive()
+    {
+        _isSpeedBoostActive = true;
+        StartCoroutine(SpeedBoostPowerDownRoutine());
+    }
+
     IEnumerator PowerupCountdownRoutine()
     {
         yield return new WaitForSeconds(5f);
         _isDoubleShotActive = false;
+
+        
     }
 
+    IEnumerator SpeedBoostPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isSpeedBoostActive = false;
+    }
 
 
 }
