@@ -40,7 +40,7 @@ public class Powerup : MonoBehaviour
                         player.LaserPowerupActive();
                         break;
                     case 2: //defense
-                        Debug.Log("got defense boost");
+                        player.ShieldActivate();
                         break;
                 }
 

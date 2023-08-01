@@ -28,6 +28,12 @@ public class Player : MonoBehaviour
     private bool _isSpeedBoostActive = false;
     [SerializeField]
     private float _speedPowerupSpeed = 20f;
+    [SerializeField]
+    private bool _isShieldActive = false;
+    [SerializeField]
+    private GameObject _shieldVisual;
+
+    //variable reference to shield visual
 
 
     // Start is called before the first frame update
@@ -110,6 +116,13 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_isShieldActive == true)
+        {
+            _isShieldActive = false;
+            _shieldVisual.SetActive(false);
+;            return;
+        }
+
         _lives -= 1;
 
         if (_lives == 0)
@@ -119,6 +132,12 @@ public class Player : MonoBehaviour
             //tells spawnmanager to stop spawning
             Destroy(this.gameObject);
         }
+    }
+
+    public void ShieldActivate()
+    {
+        _isShieldActive = true;
+        _shieldVisual.SetActive(true);
     }
 
     public void LaserPowerupActive()
