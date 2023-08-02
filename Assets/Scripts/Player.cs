@@ -32,15 +32,18 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     [SerializeField]
     private GameObject _shieldVisual;
-
-    //variable reference to shield visual
+    [SerializeField]
+    private int _score;
+    private UIManager _uiManager;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        _score = 0;
         transform.position = new Vector3(0, -2f, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         
 
     }
@@ -125,6 +128,8 @@ public class Player : MonoBehaviour
 
         _lives -= 1;
 
+        _uiManager.UpdateLives(_lives);
+
         if (_lives == 0)
         {
             //_stopSpawning = true
@@ -166,5 +171,14 @@ public class Player : MonoBehaviour
         _isSpeedBoostActive = false;
     }
 
+    public void AddScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
+
+    }
+
+    //create method to add score
+    //communicate with UIManger to update score text
 
 }
