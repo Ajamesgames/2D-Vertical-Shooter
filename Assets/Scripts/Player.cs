@@ -35,16 +35,19 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _score;
     private UIManager _uiManager;
+    [SerializeField]
+    private GameObject _rightEngine;
+    [SerializeField]
+    private GameObject _leftEngine;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         _score = 0;
         transform.position = new Vector3(0, -2f, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        
+        _rightEngine.gameObject.SetActive(false);
+        _leftEngine.gameObject.SetActive(false);
 
     }
 
@@ -128,13 +131,21 @@ public class Player : MonoBehaviour
 
         _lives -= 1;
 
+        if (_lives == 2)
+        {
+            _rightEngine.gameObject.SetActive(true);
+        }
+        else if (_lives == 1)
+        {
+            _leftEngine.gameObject.SetActive(true);
+        }
+
         _uiManager.UpdateLives(_lives);
 
         if (_lives == 0)
         {
-            //_stopSpawning = true
-            _spawnManager.OnPlayerDeath();
-            //tells spawnmanager to stop spawning
+            _spawnManager.OnPlayerDeath(); //tells spawnmanager to stop spawning
+
             Destroy(this.gameObject);
         }
     }
@@ -177,8 +188,5 @@ public class Player : MonoBehaviour
         _uiManager.UpdateScore(_score);
 
     }
-
-    //create method to add score
-    //communicate with UIManger to update score text
 
 }

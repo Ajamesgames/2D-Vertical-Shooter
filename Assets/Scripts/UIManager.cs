@@ -14,7 +14,6 @@ public class UIManager : MonoBehaviour
     private TMP_Text _gameoverText;
     [SerializeField]
     private TMP_Text _restartText;
-    [SerializeField]
     private GameManager _gameManager;
 
 
@@ -68,6 +67,7 @@ public class UIManager : MonoBehaviour
             GameOverSequence();
 
         }
+
     }
 
     void GameOverSequence()
