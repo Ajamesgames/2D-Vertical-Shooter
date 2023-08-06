@@ -5,7 +5,7 @@ using UnityEngine;
 public class BigEnemy : MonoBehaviour
 {
     [SerializeField]
-    private float _bigEnemySpeed = 4f;
+    private float _bigEnemySpeed = 8f;
     [SerializeField]
     private bool moveLeft = false;
     [SerializeField]
