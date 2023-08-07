@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec79b896da90b254ab145244a752fb35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bigEnemySpeed: 4
+  _bigEnemySpeed: 8
   moveLeft: 0
   _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
     type: 3}

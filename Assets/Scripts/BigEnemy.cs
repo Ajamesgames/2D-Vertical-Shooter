@@ -12,11 +12,14 @@ public class BigEnemy : MonoBehaviour
     private GameObject _explosionPrefab;
     private SpawnManager _spawnManager;
 
+
     // Start is called before the first frame update
     void Start()
     {
         moveLeft = true;
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+
+        //add null checks
     }
 
     // Update is called once per frame
@@ -59,8 +62,5 @@ public class BigEnemy : MonoBehaviour
 
 
     }
-    //check for laser collision 2d trigger
-    //instantiate explision at current pos
-    //destroy explosion after 1second
 }
 

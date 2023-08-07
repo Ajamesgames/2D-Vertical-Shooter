@@ -39,6 +39,9 @@ public class Player : MonoBehaviour
     private GameObject _rightEngine;
     [SerializeField]
     private GameObject _leftEngine;
+    [SerializeField]
+    private AudioClip _laserSoundClip;
+    private AudioSource _audioSource;
 
     void Start()
     {
@@ -48,7 +51,18 @@ public class Player : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _rightEngine.gameObject.SetActive(false);
         _leftEngine.gameObject.SetActive(false);
+        _audioSource = GetComponent<AudioSource>();
 
+        if (_audioSource == null)
+        {
+            Debug.Log("Audiosource is null");
+        }
+        else
+        {
+            _audioSource.clip = _laserSoundClip;
+        }
+
+        //null check all get components
     }
 
     // Update is called once per frame
@@ -116,7 +130,8 @@ public class Player : MonoBehaviour
         {
             Instantiate(_laserPrefab, (transform.position + _laserOffSet), Quaternion.identity);
         }
-             
+
+        _audioSource.Play();
 
     }
 
