@@ -19,15 +19,16 @@ public class BigEnemy : MonoBehaviour
         moveLeft = true;
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
-        //add null checks
+        if (_spawnManager == null)
+        {
+            Debug.Log("SpawnManager is null");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         BigEnemyMovement();
-
-
     }
 
     private void BigEnemyMovement() //moves enemy left and right
@@ -59,8 +60,6 @@ public class BigEnemy : MonoBehaviour
             _spawnManager.StartSpawning();
             Destroy(this.gameObject);
         }
-
-
     }
 }
 

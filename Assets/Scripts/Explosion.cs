@@ -10,8 +10,7 @@ public class Explosion : MonoBehaviour
     void Start()
     {
         Destroy(this.gameObject, 0.5f);
-        _audioSource = GetComponent<AudioSource>();
-        _audioSource.Play();
+
 
     }
 

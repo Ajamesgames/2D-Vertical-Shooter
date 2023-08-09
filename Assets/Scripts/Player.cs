@@ -11,29 +11,29 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _canFire = -1f;
     [SerializeField]
-    private GameObject _laserPrefab;
-    private Vector3 _laserOffSet = new Vector3(0, 1.15f, 0);
+    private float _speedPowerupSpeed = 20f;
     [SerializeField]
     private int _lives = 3;
-    private SpawnManager _spawnManager;
     [SerializeField]
-    private bool _isDoubleShotActive = false;
-    [SerializeField]
-    private GameObject _doubleShotPrefab;
-    [SerializeField]
-    private bool _isTripleShotActive = false;
-    [SerializeField]
-    private GameObject _tripleShotPrefab;
+    private int _score;
     [SerializeField]
     private bool _isSpeedBoostActive = false;
     [SerializeField]
-    private float _speedPowerupSpeed = 20f;
-    [SerializeField]
     private bool _isShieldActive = false;
     [SerializeField]
-    private GameObject _shieldVisual;
+    private bool _isTripleShotActive = false;
     [SerializeField]
-    private int _score;
+    private bool _isDoubleShotActive = false;
+    private Vector3 _laserOffSet = new Vector3(0, 1.15f, 0);
+    [SerializeField]
+    private GameObject _laserPrefab;
+    [SerializeField]
+    private GameObject _doubleShotPrefab;
+    [SerializeField]
+    private GameObject _tripleShotPrefab;
+    private SpawnManager _spawnManager;
+    [SerializeField]
+    private GameObject _shieldVisual;
     private UIManager _uiManager;
     [SerializeField]
     private GameObject _rightEngine;
@@ -62,7 +62,15 @@ public class Player : MonoBehaviour
             _audioSource.clip = _laserSoundClip;
         }
 
-        //null check all get components
+        if (_spawnManager == null)
+        {
+            Debug.Log("Spawn Manager is null");
+        }
+        if (_uiManager == null)
+        {
+            Debug.Log("UIManager is null");
+        }
+
     }
 
     // Update is called once per frame
@@ -202,6 +210,15 @@ public class Player : MonoBehaviour
         _score += points;
         _uiManager.UpdateScore(_score);
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Enemy Laser"))
+        {
+            Damage();
+            Destroy(collision.gameObject);
+        }
     }
 
 }

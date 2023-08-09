@@ -14,15 +14,6 @@ public class SpawnManager : MonoBehaviour
     private bool _stopSpawning = false;
 
     
-
-    void Start()
-    {
-
-
-
-
-    }
-
     public void StartSpawning()
     {
         StartCoroutine(SpawnRoutine());
@@ -38,7 +29,7 @@ public class SpawnManager : MonoBehaviour
             Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
             GameObject newEnemy = Instantiate(_enemyPrefab, _randomSpawnPos, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
         }
         //coroutine for spawning enemy prefab at random location every 5 seconds
     }
@@ -55,15 +46,12 @@ public class SpawnManager : MonoBehaviour
 
             yield return new WaitForSeconds(5f);
         }
-
-
     }
 
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
     }
-
 }
 
 

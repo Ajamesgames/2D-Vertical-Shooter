@@ -23,7 +23,6 @@ public class UIManager : MonoBehaviour
         _livesImg[0].gameObject.SetActive(true);
         _livesImg[1].gameObject.SetActive(true);
         _livesImg[2].gameObject.SetActive(true);
-        //lives set to 3 in UI
         _gameoverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
 
@@ -37,11 +36,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void UpdateScore(int playerScore)
     {
@@ -63,11 +57,8 @@ public class UIManager : MonoBehaviour
 
         if (currentLives == 0)
         {
-            
             GameOverSequence();
-
         }
-
     }
 
     void GameOverSequence()
@@ -87,10 +78,5 @@ public class UIManager : MonoBehaviour
             _gameoverText.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.5f);
         }
-
-
     }
-
-
-
 }

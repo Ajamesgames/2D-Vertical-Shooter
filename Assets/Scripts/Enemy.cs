@@ -14,6 +14,12 @@ public class Enemy : MonoBehaviour
     private AudioClip _explosionClip;
     private AudioSource _audioSource;
 
+    [SerializeField]
+    private GameObject _enemyLaserPrefab;
+    private Vector3 _laserOffset = new Vector3(0, -1, 0);
+
+    private float _fireRate = 3f;
+    private float _canFire = 0f;
 
     private void Start()
     {
@@ -44,6 +50,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         EnemyMovement();
+        EnemyFireLaser();
     }
 
     void EnemyMovement()
@@ -58,7 +65,16 @@ public class Enemy : MonoBehaviour
             transform.position = new Vector3(randomX, 7.5f, 0);
         }
         //if enemy goes under 6y, teleport to x boundary range at 7.5y
+    }
 
+    private void EnemyFireLaser()
+    {
+        if (Time.time > _canFire)
+        {
+            _fireRate = Random.Range(3f, 7f);
+            _canFire = Time.time + _fireRate;
+            Instantiate(_enemyLaserPrefab, (transform.position + _laserOffset), Quaternion.identity);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -74,6 +90,7 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
+            Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 0.2f);
         }
 
@@ -84,10 +101,10 @@ public class Enemy : MonoBehaviour
             _enemySpeed = 0;
             _playerScript.AddScore(10);
             Destroy(other.gameObject);
+            Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 0.2f);
         }
         //collision information with player and laser
 
     }
-
 }
