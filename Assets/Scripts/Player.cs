@@ -42,6 +42,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioClip _laserSoundClip;
     private AudioSource _audioSource;
+    [SerializeField]
+    private GameObject _thruster;
+
 
     void Start()
     {
@@ -91,6 +94,18 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float veritcalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, veritcalInput, 0);
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            _playerSpeed = 20f;
+            _thruster.SetActive(true);
+        }
+        else
+        {
+            _playerSpeed = 10f;
+            _thruster.SetActive(false);
+        }
+
 
         if(_isSpeedBoostActive == true)
         {
@@ -220,5 +235,8 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
+
+
+
 
 }

@@ -7,7 +7,7 @@ public class BigEnemy : MonoBehaviour
     [SerializeField]
     private float _bigEnemySpeed = 8f;
     [SerializeField]
-    private bool moveLeft = false;
+    private bool _moveLeft = false;
     [SerializeField]
     private GameObject _explosionPrefab;
     private SpawnManager _spawnManager;
@@ -16,7 +16,7 @@ public class BigEnemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        moveLeft = true;
+        _moveLeft = true;
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
         if (_spawnManager == null)
@@ -35,17 +35,17 @@ public class BigEnemy : MonoBehaviour
     {
         if (transform.position.x >= 7f)
         {
-            moveLeft = true;
+            _moveLeft = true;
         }
-        if (moveLeft == true)
+        if (_moveLeft == true)
         {
             transform.Translate(Vector3.left * _bigEnemySpeed * Time.deltaTime);
         }
         if (transform.position.x <= -7f)
         {
-            moveLeft = false;
+            _moveLeft = false;
         }
-        if (moveLeft == false)
+        if (_moveLeft == false)
         {
             transform.Translate(Vector3.right * _bigEnemySpeed * Time.deltaTime);
         }
