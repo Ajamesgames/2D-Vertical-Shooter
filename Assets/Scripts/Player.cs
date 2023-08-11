@@ -45,6 +45,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _thruster;
 
+    private int _shieldStrength = 3;
+
 
     void Start()
     {
@@ -160,14 +162,33 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        SpriteRenderer spriteRenderer = _shieldVisual.transform.GetComponent<SpriteRenderer>();
+
         if (_isShieldActive == true)
+        {
+            _shieldStrength -= 1;
+        }
+        else if (_isShieldActive == false)
+        {
+            _lives -= 1;
+        }
+
+        if (_shieldStrength == 2)
+        {
+            spriteRenderer.color = Color.yellow;
+        }
+        if (_shieldStrength == 1)
+        {
+            spriteRenderer.color = Color.red;
+        }
+
+        if (_isShieldActive == true && _shieldStrength == 0)
         {
             _isShieldActive = false;
             _shieldVisual.SetActive(false);
-;            return;
+            return;
         }
 
-        _lives -= 1;
 
         if (_lives == 2)
         {
@@ -190,7 +211,11 @@ public class Player : MonoBehaviour
 
     public void ShieldActivate()
     {
+        SpriteRenderer spriteRenderer = _shieldVisual.transform.GetComponent<SpriteRenderer>();
+
+        _shieldStrength = 3;
         _isShieldActive = true;
+        spriteRenderer.color = Color.white;
         _shieldVisual.SetActive(true);
     }
 
