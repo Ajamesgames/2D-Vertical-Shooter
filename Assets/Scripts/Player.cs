@@ -47,9 +47,17 @@ public class Player : MonoBehaviour
 
     private int _shieldStrength = 3;
 
+    [SerializeField]
+    private int _ammoCount = 15;
+    [SerializeField]
+    private AudioClip _outOfAmmoClip;
+
+
+
 
     void Start()
     {
+        _ammoCount = 15;
         _score = 0;
         transform.position = new Vector3(0, -2f, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -61,10 +69,6 @@ public class Player : MonoBehaviour
         if (_audioSource == null)
         {
             Debug.Log("Audiosource is null");
-        }
-        else
-        {
-            _audioSource.clip = _laserSoundClip;
         }
 
         if (_spawnManager == null)
@@ -83,10 +87,14 @@ public class Player : MonoBehaviour
     {
         CalculateMovement();
 
-        if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _ammoCount > 0)
             {
                 FireLaser();
-                //fire laser with spacebar with cooldown
+            }
+        else if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _ammoCount == 0)
+            {
+                _audioSource.clip = _outOfAmmoClip; 
+                _audioSource.Play(); //play out of ammo sound
             }
 
     }
@@ -156,6 +164,9 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, (transform.position + _laserOffSet), Quaternion.identity);
         }
 
+        _ammoCount -= 1;
+        _uiManager.UpdateAmmo(_ammoCount);
+        _audioSource.clip = _laserSoundClip;
         _audioSource.Play();
 
     }
