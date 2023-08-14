@@ -11,13 +11,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _canFire = -1f;
     [SerializeField]
-    private float _speedPowerupSpeed = 20f;
-    [SerializeField]
     private int _lives = 3;
     [SerializeField]
-    private int _score;
-    [SerializeField]
-    private bool _isSpeedBoostActive = false;
+    private int _score;    
     [SerializeField]
     private bool _isShieldActive = false;
     [SerializeField]
@@ -48,7 +44,7 @@ public class Player : MonoBehaviour
     private int _shieldStrength = 3;
 
     [SerializeField]
-    private int _ammoCount = 15;
+    private int _ammoCount;
     [SerializeField]
     private AudioClip _outOfAmmoClip;
 
@@ -82,7 +78,6 @@ public class Player : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         CalculateMovement();
@@ -116,16 +111,8 @@ public class Player : MonoBehaviour
             _thruster.SetActive(false);
         }
 
+        transform.Translate(direction * Time.deltaTime * _playerSpeed);
 
-        if(_isSpeedBoostActive == true)
-        {
-            transform.Translate(direction * Time.deltaTime * _speedPowerupSpeed);
-        }
-        else
-        {
-            transform.Translate(direction * Time.deltaTime * _playerSpeed);
-        }
-        
 
         if (transform.position.y > 4.5f)
         {
@@ -144,7 +131,6 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(-7.5f, transform.position.y, 0);
         }
-        //player movement boundries
     }
 
     void FireLaser()
@@ -236,31 +222,24 @@ public class Player : MonoBehaviour
         StartCoroutine(PowerupCountdownRoutine());
     }
 
-    public void SpeedPowerupActive()
+    public void AmmoPowerupActivate()
     {
-        _isSpeedBoostActive = true;
-        StartCoroutine(SpeedBoostPowerDownRoutine());
+        _ammoCount += 10;
+        _uiManager.UpdateAmmo(_ammoCount);
+        //_isSpeedBoostActive = true; (OLD SPEED POWERUP CODE)
+        //StartCoroutine(SpeedBoostPowerDownRoutine()); (OLD SPEED POWERUP CODE)
     }
 
     IEnumerator PowerupCountdownRoutine()
     {
         yield return new WaitForSeconds(5f);
         _isDoubleShotActive = false;
-
-        
-    }
-
-    IEnumerator SpeedBoostPowerDownRoutine()
-    {
-        yield return new WaitForSeconds(5f);
-        _isSpeedBoostActive = false;
     }
 
     public void AddScore(int points)
     {
         _score += points;
         _uiManager.UpdateScore(_score);
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

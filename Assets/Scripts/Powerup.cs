@@ -33,8 +33,8 @@ public class Powerup : MonoBehaviour
             {
                 switch (_powerupID)
                 {
-                    case 0: //speed
-                        player.SpeedPowerupActive();
+                    case 0: //ammo
+                        player.AmmoPowerupActivate();
                         break;
                     case 1: //attack
                         player.LaserPowerupActive();

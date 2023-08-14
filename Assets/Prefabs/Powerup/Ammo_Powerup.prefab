@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2856337527822431618}
   - component: {fileID: 1460097758}
   m_Layer: 0
-  m_Name: Speed_Powerup
+  m_Name: Ammo_Powerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
