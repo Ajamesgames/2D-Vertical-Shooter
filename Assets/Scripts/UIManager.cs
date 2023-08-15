@@ -48,15 +48,24 @@ public class UIManager : MonoBehaviour
 
     public void UpdateLives(int currentLives)
     {
-        //as we lose lives, each life image is being disabled
+        if (currentLives == 3)
+        {
+            _livesImg[2].gameObject.SetActive(true);
+            _livesImg[1].gameObject.SetActive(true);
+            _livesImg[0].gameObject.SetActive(true);
+        }
         if (currentLives == 2)
         {
             _livesImg[2].gameObject.SetActive(false);
+            _livesImg[1].gameObject.SetActive(true);
+            _livesImg[0].gameObject.SetActive(true);
         }
         
         if (currentLives == 1)
         {
+            _livesImg[2].gameObject.SetActive(false);
             _livesImg[1].gameObject.SetActive(false);
+            _livesImg[0].gameObject.SetActive(true);
         }
 
         if (currentLives == 0)

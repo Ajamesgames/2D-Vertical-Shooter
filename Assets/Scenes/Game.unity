@@ -835,10 +835,8 @@ MonoBehaviour:
   _playerSpeed: 10
   _fireRate: 0.2
   _canFire: 0
-  _speedPowerupSpeed: 20
   _lives: 3
   _score: 0
-  _isSpeedBoostActive: 0
   _isShieldActive: 0
   _isTripleShotActive: 0
   _isDoubleShotActive: 0
@@ -853,6 +851,7 @@ MonoBehaviour:
   _leftEngine: {fileID: 282579635}
   _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   _thruster: {fileID: 367024332}
+  _ammoCount: 0
   _outOfAmmoClip: {fileID: 8300000, guid: 26063c41085f295448225110d63d3b81, type: 3}
 --- !u!212 &482002672
 SpriteRenderer:
@@ -1416,6 +1415,7 @@ MonoBehaviour:
   - {fileID: 5619324047396184022, guid: 21e78b21d4647aa429b65e15053d45a9, type: 3}
   - {fileID: 4528510351080993777, guid: 1d007d6d7e40a73438d92fe837a36daf, type: 3}
   - {fileID: 4560912984318735875, guid: a96491352f6c0214f93c0fa7131f8869, type: 3}
+  - {fileID: 3262250489921264471, guid: 34c339b0e08a06f46a40140681ddeca6, type: 3}
 --- !u!4 &1073695410
 Transform:
   m_ObjectHideFlags: 0

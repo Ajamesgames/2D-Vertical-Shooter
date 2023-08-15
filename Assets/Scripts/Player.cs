@@ -251,7 +251,30 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void LifePowerupPickup()
+    {
+        if (_lives < 3)
+        {
+            _lives += 1;
+            _uiManager.UpdateLives(_lives);
+        }
 
+        if(_lives == 3)
+        {
+            _rightEngine.gameObject.SetActive(false);
+            _leftEngine.gameObject.SetActive(false);
+        }
+        if (_lives == 2)
+        {
+            _rightEngine.gameObject.SetActive(true);
+            _leftEngine.gameObject.SetActive(false);
+        }
+        if (_lives == 1)
+        {
+            _rightEngine.gameObject.SetActive(true);
+            _leftEngine.gameObject.SetActive(true);
+        }
+    }
 
 
 }
