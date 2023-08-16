@@ -21,6 +21,9 @@ public class Enemy : MonoBehaviour
     private float _fireRate = 3f;
     private float _canFire = 0f;
 
+    [SerializeField]
+    private GameObject _explosionPrefab;
+
     private void Start()
     {
         _playerScript = GameObject.Find("Player").transform.GetComponent<Player>();
@@ -81,17 +84,12 @@ public class Enemy : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Player player = other.transform.GetComponent<Player>();
-
-            if(player != null)
-            {
-                player.Damage();
-            }
+            _playerScript.Damage();
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
             Destroy(GetComponent<Collider2D>());
-            Destroy(this.gameObject, 0.2f);
+            Destroy(this.gameObject, 0.75f);
         }
 
         if(other.CompareTag("Laser"))
@@ -99,12 +97,32 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
+            Destroy(GetComponent<Collider2D>());
             _playerScript.AddScore(10);
             Destroy(other.gameObject);
-            Destroy(GetComponent<Collider2D>());
-            Destroy(this.gameObject, 0.2f);
+            Destroy(this.gameObject, 0.75f);
         }
-        //collision information with player and laser
 
+        if(other.CompareTag("Explosion"))
+        {
+            _animator.SetTrigger("OnEnemyDeath");
+            _audioSource.Play();
+            _enemySpeed = 0;
+            Destroy(GetComponent<Collider2D>());
+            _playerScript.AddScore(10);
+            Destroy(this.gameObject, 0.75f);
+        }
+
+        if(other.CompareTag("Bomb"))
+        {
+            _animator.SetTrigger("OnEnemyDeath");
+            _audioSource.Play();
+            _enemySpeed = 0;
+            Destroy(GetComponent<Collider2D>());
+            _playerScript.AddScore(10);
+            Destroy(other.gameObject);
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(this.gameObject, 0.75f);
+        }
     }
 }

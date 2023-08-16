@@ -52,6 +52,8 @@ MonoBehaviour:
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _enemyLaserPrefab: {fileID: 9043832692642660349, guid: 197f377ec2103a441aacc367d7f50b64,
     type: 3}
+  _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
+    type: 3}
 --- !u!61 &4392759673163770662
 BoxCollider2D:
   m_ObjectHideFlags: 0

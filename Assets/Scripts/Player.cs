@@ -48,7 +48,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioClip _outOfAmmoClip;
 
-
+    [SerializeField]
+    private bool _isBombActive = false;
+    [SerializeField]
+    private GameObject _bombPrefab;
 
 
     void Start()
@@ -137,13 +140,18 @@ public class Player : MonoBehaviour
     {
         _canFire = Time.time + _fireRate; //adds fire rate to time value
 
-        if (_isDoubleShotActive == true)
+
+        if (_isBombActive == true)
         {
-            Instantiate(_doubleShotPrefab, transform.position, Quaternion.identity);
+            Instantiate(_bombPrefab, (transform.position + _laserOffSet), Quaternion.identity);
         }
         else if (_isTripleShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else if (_isDoubleShotActive == true)
+        {
+            Instantiate(_doubleShotPrefab, transform.position, Quaternion.identity);
         }
         else
         {
@@ -226,8 +234,6 @@ public class Player : MonoBehaviour
     {
         _ammoCount += 10;
         _uiManager.UpdateAmmo(_ammoCount);
-        //_isSpeedBoostActive = true; (OLD SPEED POWERUP CODE)
-        //StartCoroutine(SpeedBoostPowerDownRoutine()); (OLD SPEED POWERUP CODE)
     }
 
     IEnumerator PowerupCountdownRoutine()
@@ -276,5 +282,16 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void BombPowerupActive()
+    {
+        _isBombActive = true;
+        StartCoroutine(BombPowerDownRoutine());
+    }
+
+    IEnumerator BombPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isBombActive = false;
+    }
 
 }
