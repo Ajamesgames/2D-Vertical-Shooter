@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _ammoText;
 
+    [SerializeField]
+    private Slider _thrusterSlider;
+
 
     // Start is called before the first frame update
     void Start()
@@ -97,4 +100,11 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
     }
+
+    public void ThrusterSliderUpdate(float thrusterValue)
+    {
+        _thrusterSlider.value = thrusterValue;
+    }
+
+
 }

@@ -62,12 +62,10 @@ public class Enemy : MonoBehaviour
 
         if (transform.position.y < -6)
         {
-            float randomX = Random.Range(-7.25f, 7.25f);
-            //random x range variable
+            float randomX = Random.Range(-7.25f, 7.25f);    
 
             transform.position = new Vector3(randomX, 7.5f, 0);
         }
-        //if enemy goes under 6y, teleport to x boundary range at 7.5y
     }
 
     private void EnemyFireLaser()

@@ -53,9 +53,19 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _bombPrefab;
 
+    [SerializeField]
+    private float _thrusterFuel;
+    [SerializeField]
+    private float _thrusterRegenRate = 25;
+    [SerializeField]
+    private float _thrusterUseRate = 75;
+    [SerializeField]
+    private bool _isThrusterCalled = false;
+
 
     void Start()
     {
+        _thrusterFuel = 100;
         _ammoCount = 15;
         _score = 0;
         transform.position = new Vector3(0, -2f, 0);
@@ -85,14 +95,21 @@ public class Player : MonoBehaviour
     {
         CalculateMovement();
 
-        if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _ammoCount > 0)
+        CalculateThrusterActivity(); //makes _isThrusterCalled true or false based on shift key
+        if (_isThrusterCalled == false) //if shift key not down then fuel will regen
+        {
+            ThrusterFuelRegen();
+        }
+        _uiManager.ThrusterSliderUpdate(_thrusterFuel);
+
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _ammoCount > 0)
             {
                 FireLaser();
             }
         else if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _ammoCount == 0)
             {
                 _audioSource.clip = _outOfAmmoClip; 
-                _audioSource.Play(); //play out of ammo sound
+                _audioSource.Play(); 
             }
 
     }
@@ -103,10 +120,11 @@ public class Player : MonoBehaviour
         float veritcalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, veritcalInput, 0);
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && _thrusterFuel > 0)
         {
             _playerSpeed = 20f;
             _thruster.SetActive(true);
+            ThrusterFuelUse();
         }
         else
         {
@@ -292,6 +310,34 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         _isBombActive = false;
+    }
+
+    private void ThrusterFuelRegen()
+    {
+
+        if (_thrusterFuel < 100)
+        {
+            _thrusterFuel += _thrusterRegenRate * Time.deltaTime;
+        }
+
+    }
+
+    private void ThrusterFuelUse()
+    {
+        _thrusterFuel -= _thrusterUseRate * Time.deltaTime;
+    }
+
+    
+    private void CalculateThrusterActivity()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            _isThrusterCalled = true;
+        }
+        else
+        {
+            _isThrusterCalled = false;
+        }
     }
 
 }
