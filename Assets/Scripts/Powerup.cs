@@ -6,14 +6,11 @@ public class Powerup : MonoBehaviour
 {
     [SerializeField]
     private float _powerupSpeed = 2f;
-
     [SerializeField] //0 = ammo, 1 = attack, 2 = defense, 3 = life powerup, 4 = bomb
     private int _powerupID;
-
     [SerializeField]
     private AudioClip _powerupClip;
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector3.down * _powerupSpeed * Time.deltaTime);

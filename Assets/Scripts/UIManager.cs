@@ -9,21 +9,17 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _scoreText;
     [SerializeField]
-    private Image[] _livesImg;
+    private TMP_Text _ammoText;
     [SerializeField]
     private TMP_Text _gameoverText;
     [SerializeField]
     private TMP_Text _restartText;
-    private GameManager _gameManager;
-
     [SerializeField]
-    private TMP_Text _ammoText;
-
+    private Image[] _livesImg;
     [SerializeField]
     private Slider _thrusterSlider;
+    private GameManager _gameManager;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         _livesImg[0].gameObject.SetActive(true);

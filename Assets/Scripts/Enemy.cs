@@ -6,23 +6,18 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _enemySpeed = 4f;
-    private Player _playerScript;
-
-    Animator _animator;
-
+    private float _fireRate = 3f;
+    private float _canFire = 0f;
+    private Vector3 _laserOffset = new Vector3(0, -1, 0);
+    [SerializeField]
+    private GameObject _enemyLaserPrefab;
+    [SerializeField]
+    private GameObject _explosionPrefab;
     [SerializeField]
     private AudioClip _explosionClip;
     private AudioSource _audioSource;
-
-    [SerializeField]
-    private GameObject _enemyLaserPrefab;
-    private Vector3 _laserOffset = new Vector3(0, -1, 0);
-
-    private float _fireRate = 3f;
-    private float _canFire = 0f;
-
-    [SerializeField]
-    private GameObject _explosionPrefab;
+    private Player _playerScript;
+    Animator _animator;
 
     private void Start()
     {

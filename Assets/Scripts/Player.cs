@@ -11,63 +11,57 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _canFire = -1f;
     [SerializeField]
+    private float _thrusterFuel;
+    [SerializeField]
+    private float _thrusterRegenRate = 25;
+    [SerializeField]
+    private float _thrusterUseRate = 75;
+    [SerializeField]
+    private float _shakeIntensity = 1.0f;
+    [SerializeField]
     private int _lives = 3;
     [SerializeField]
-    private int _score;    
+    private int _score;
+    private int _shieldStrength = 3;
+    [SerializeField]
+    private int _ammoCount;
     [SerializeField]
     private bool _isShieldActive = false;
     [SerializeField]
     private bool _isTripleShotActive = false;
     [SerializeField]
     private bool _isDoubleShotActive = false;
+    [SerializeField]
+    private bool _isBombActive = false;
+    private bool _isThrusterCalled = false;
+    private bool _isCameraShaking = false;
     private Vector3 _laserOffSet = new Vector3(0, 1.15f, 0);
+    private Vector3 _camOriginPos;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
     private GameObject _doubleShotPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
-    private SpawnManager _spawnManager;
     [SerializeField]
     private GameObject _shieldVisual;
-    private UIManager _uiManager;
     [SerializeField]
     private GameObject _rightEngine;
     [SerializeField]
     private GameObject _leftEngine;
     [SerializeField]
-    private AudioClip _laserSoundClip;
-    private AudioSource _audioSource;
-    [SerializeField]
     private GameObject _thruster;
-
-    private int _shieldStrength = 3;
-
-    [SerializeField]
-    private int _ammoCount;
-    [SerializeField]
-    private AudioClip _outOfAmmoClip;
-
-    [SerializeField]
-    private bool _isBombActive = false;
     [SerializeField]
     private GameObject _bombPrefab;
-
-    [SerializeField]
-    private float _thrusterFuel;
-    [SerializeField]
-    private float _thrusterRegenRate = 25;
-    [SerializeField]
-    private float _thrusterUseRate = 75;
-    private bool _isThrusterCalled = false;
-
     [SerializeField]
     private GameObject _mainCamera;
-    private Vector3 _camOriginPos;
     [SerializeField]
-    private float _shakeIntensity = 1.0f;
-    private bool _isCameraShaking = false;
-    
+    private AudioClip _laserSoundClip;
+    [SerializeField]
+    private AudioClip _outOfAmmoClip;
+    private AudioSource _audioSource;
+    private UIManager _uiManager;
+    private SpawnManager _spawnManager;
 
 
     void Start()
@@ -167,6 +161,32 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void CalculateThrusterActivity()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            _isThrusterCalled = true;
+        }
+        else
+        {
+            _isThrusterCalled = false;
+        }
+    }
+
+    private void ThrusterFuelRegen()
+    {
+
+        if (_thrusterFuel < 100)
+        {
+            _thrusterFuel += _thrusterRegenRate * Time.deltaTime;
+        }
+
+    }
+    private void ThrusterFuelUse()
+    {
+        _thrusterFuel -= _thrusterUseRate * Time.deltaTime;
+    }
+
     void FireLaser()
     {
         _canFire = Time.time + _fireRate; //adds fire rate to time value
@@ -194,6 +214,14 @@ public class Player : MonoBehaviour
         _audioSource.clip = _laserSoundClip;
         _audioSource.Play();
 
+    }
+
+    IEnumerator CameraShakeRoutine()
+    {
+        _mainCamera.transform.position = _camOriginPos + (Random.insideUnitSphere * _shakeIntensity);
+        yield return new WaitForSeconds(0.25f);
+        _mainCamera.transform.position = _camOriginPos;
+        _isCameraShaking = false;
     }
 
     public void Damage()
@@ -248,6 +276,15 @@ public class Player : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy Laser"))
+        {
+            Damage();
+            Destroy(collision.gameObject);
+        }
+    }
+
     public void ShieldActivate()
     {
         SpriteRenderer spriteRenderer = _shieldVisual.transform.GetComponent<SpriteRenderer>();
@@ -258,39 +295,6 @@ public class Player : MonoBehaviour
         _shieldVisual.SetActive(true);
     }
 
-    public void LaserPowerupActive()
-    {
-        _isDoubleShotActive = true;
-        StartCoroutine(PowerupCountdownRoutine());
-    }
-
-    public void AmmoPowerupActivate()
-    {
-        _ammoCount += 10;
-        _uiManager.UpdateAmmo(_ammoCount);
-    }
-
-    IEnumerator PowerupCountdownRoutine()
-    {
-        yield return new WaitForSeconds(5f);
-        _isDoubleShotActive = false;
-    }
-
-    public void AddScore(int points)
-    {
-        _score += points;
-        _uiManager.UpdateScore(_score);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.CompareTag("Enemy Laser"))
-        {
-            Damage();
-            Destroy(collision.gameObject);
-        }
-    }
-
     public void LifePowerupPickup()
     {
         if (_lives < 3)
@@ -299,7 +303,7 @@ public class Player : MonoBehaviour
             _uiManager.UpdateLives(_lives);
         }
 
-        if(_lives == 3)
+        if (_lives == 3)
         {
             _rightEngine.gameObject.SetActive(false);
             _leftEngine.gameObject.SetActive(false);
@@ -316,56 +320,39 @@ public class Player : MonoBehaviour
         }
     }
 
+
+    public void LaserPowerupActive()
+    {
+        _isDoubleShotActive = true;
+        StartCoroutine(PowerupCountdownRoutine());
+    }
+    IEnumerator PowerupCountdownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isDoubleShotActive = false;
+    }
+
     public void BombPowerupActive()
     {
         _isBombActive = true;
         StartCoroutine(BombPowerDownRoutine());
     }
-
     IEnumerator BombPowerDownRoutine()
     {
         yield return new WaitForSeconds(5f);
         _isBombActive = false;
     }
 
-    private void ThrusterFuelRegen()
+    public void AddScore(int points)
     {
-
-        if (_thrusterFuel < 100)
-        {
-            _thrusterFuel += _thrusterRegenRate * Time.deltaTime;
-        }
-
+        _score += points;
+        _uiManager.UpdateScore(_score);
     }
 
-    private void ThrusterFuelUse()
+    public void AmmoPowerupActivate()
     {
-        _thrusterFuel -= _thrusterUseRate * Time.deltaTime;
+        _ammoCount += 10;
+        _uiManager.UpdateAmmo(_ammoCount);
     }
-
-    
-    private void CalculateThrusterActivity()
-    {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            _isThrusterCalled = true;
-        }
-        else
-        {
-            _isThrusterCalled = false;
-        }
-    }
-
-
-    IEnumerator CameraShakeRoutine()
-    {
-        _mainCamera.transform.position = _camOriginPos + (Random.insideUnitSphere * _shakeIntensity);
-        yield return new WaitForSeconds(0.25f);
-        _mainCamera.transform.position = _camOriginPos;
-        _isCameraShaking = false;
-
-    }
-
-
 
 }

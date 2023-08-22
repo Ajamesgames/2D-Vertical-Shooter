@@ -10,10 +10,8 @@ public class SpawnManager : MonoBehaviour
     GameObject _enemyContainer;
     [SerializeField]
     private GameObject[] _powerups; //0 = speed, 1 = attack, 2 = defense, 3 = life
-
     [SerializeField]
     private GameObject[] _rarePowerups; //0 = bomb
-
     private bool _stopSpawning = false;
 
     

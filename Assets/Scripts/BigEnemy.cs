@@ -13,7 +13,6 @@ public class BigEnemy : MonoBehaviour
     private SpawnManager _spawnManager;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         _moveLeft = true;
