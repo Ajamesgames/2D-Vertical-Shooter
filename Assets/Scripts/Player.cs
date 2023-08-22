@@ -59,12 +59,20 @@ public class Player : MonoBehaviour
     private float _thrusterRegenRate = 25;
     [SerializeField]
     private float _thrusterUseRate = 75;
-    [SerializeField]
     private bool _isThrusterCalled = false;
+
+    [SerializeField]
+    private GameObject _mainCamera;
+    private Vector3 _camOriginPos;
+    [SerializeField]
+    private float _shakeIntensity = 1.0f;
+    private bool _isCameraShaking = false;
+    
 
 
     void Start()
     {
+        _camOriginPos = _mainCamera.transform.position;
         _thrusterFuel = 100;
         _ammoCount = 15;
         _score = 0;
@@ -111,6 +119,11 @@ public class Player : MonoBehaviour
                 _audioSource.clip = _outOfAmmoClip; 
                 _audioSource.Play(); 
             }
+
+        if (_isCameraShaking == true)
+        {
+            StartCoroutine(CameraShakeRoutine());
+        }
 
     }
 
@@ -230,6 +243,9 @@ public class Player : MonoBehaviour
 
             Destroy(this.gameObject);
         }
+
+        _isCameraShaking = true;
+
     }
 
     public void ShieldActivate()
@@ -339,5 +355,17 @@ public class Player : MonoBehaviour
             _isThrusterCalled = false;
         }
     }
+
+
+    IEnumerator CameraShakeRoutine()
+    {
+        _mainCamera.transform.position = _camOriginPos + (Random.insideUnitSphere * _shakeIntensity);
+        yield return new WaitForSeconds(0.25f);
+        _mainCamera.transform.position = _camOriginPos;
+        _isCameraShaking = false;
+
+    }
+
+
 
 }
