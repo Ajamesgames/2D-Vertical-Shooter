@@ -588,13 +588,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scoreText: {fileID: 1799075538}
+  _ammoText: {fileID: 1752746874}
+  _gameoverText: {fileID: 206485932}
+  _restartText: {fileID: 1131697089}
   _livesImg:
   - {fileID: 1242013907}
   - {fileID: 357959205}
   - {fileID: 1731690614}
-  _gameoverText: {fileID: 206485932}
-  _restartText: {fileID: 1131697089}
-  _ammoText: {fileID: 1752746874}
   _thrusterSlider: {fileID: 248168731}
 --- !u!1 &248168729
 GameObject:
@@ -1085,11 +1085,17 @@ MonoBehaviour:
   _playerSpeed: 10
   _fireRate: 0.2
   _canFire: 0
+  _thrusterFuel: 0
+  _thrusterRegenRate: 25
+  _thrusterUseRate: 75
+  _shakeIntensity: 1
   _lives: 3
   _score: 0
+  _ammoCount: 0
   _isShieldActive: 0
   _isTripleShotActive: 0
   _isDoubleShotActive: 0
+  _isBombActive: 0
   _laserPrefab: {fileID: 4545298769442348693, guid: d91208e70b85eff4fade9d114700d1d8,
     type: 3}
   _doubleShotPrefab: {fileID: 9036411708261386493, guid: dd72c0a6d3a63894c9343637b753e253,
@@ -1099,18 +1105,12 @@ MonoBehaviour:
   _shieldVisual: {fileID: 2125244464}
   _rightEngine: {fileID: 1225612660}
   _leftEngine: {fileID: 282579635}
-  _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   _thruster: {fileID: 367024332}
-  _ammoCount: 0
-  _outOfAmmoClip: {fileID: 8300000, guid: 26063c41085f295448225110d63d3b81, type: 3}
-  _isBombActive: 0
   _bombPrefab: {fileID: 8933084920721023820, guid: a5d41121993899b40aa802a20124fc96,
     type: 3}
-  _thrusterFuel: 0
-  _thrusterRegenRate: 25
-  _thrusterUseRate: 75
   _mainCamera: {fileID: 2109287790}
-  _shakeIntensity: 1
+  _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  _outOfAmmoClip: {fileID: 8300000, guid: 26063c41085f295448225110d63d3b81, type: 3}
 --- !u!212 &482002672
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3046,7 +3046,7 @@ PrefabInstance:
     - target: {fileID: 637157539356987010, guid: 7fbeb706629b87d4a83b153630854d00,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.37
       objectReference: {fileID: 0}
     - target: {fileID: 637157539356987010, guid: 7fbeb706629b87d4a83b153630854d00,
         type: 3}

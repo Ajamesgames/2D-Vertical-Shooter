@@ -19,6 +19,12 @@ public class Enemy : MonoBehaviour
     private Player _playerScript;
     Animator _animator;
 
+    private bool _moveLeft = false;
+    [SerializeField]
+    private float _sideMovementSpeed = 8f;
+
+
+
     private void Start()
     {
         _playerScript = GameObject.Find("Player").transform.GetComponent<Player>();
@@ -61,6 +67,24 @@ public class Enemy : MonoBehaviour
 
             transform.position = new Vector3(randomX, 7.5f, 0);
         }
+
+        if (transform.position.x >= 7f)
+        {
+            _moveLeft = true;
+        }
+        if (_moveLeft == true)
+        {
+            transform.Translate(Vector3.left * _sideMovementSpeed * Time.deltaTime);
+        }
+        if (transform.position.x <= -7f)
+        {
+            _moveLeft = false;
+        }
+        if (_moveLeft == false)
+        {
+            transform.Translate(Vector3.right * _sideMovementSpeed * Time.deltaTime);
+        }
+
     }
 
     private void EnemyFireLaser()
