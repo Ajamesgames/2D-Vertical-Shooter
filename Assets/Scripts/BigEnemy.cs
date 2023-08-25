@@ -7,6 +7,8 @@ public class BigEnemy : MonoBehaviour
     [SerializeField]
     private float _bigEnemySpeed = 8f;
     [SerializeField]
+    private float _descentSpeed = 2f;
+    [SerializeField]
     private bool _moveLeft = false;
     [SerializeField]
     private GameObject _explosionPrefab;
@@ -32,7 +34,14 @@ public class BigEnemy : MonoBehaviour
 
     private void BigEnemyMovement() //moves enemy left and right
     {
-        if (transform.position.x >= 7f)
+        if (transform.position.y > 4f)
+        {
+            transform.Translate(Vector3.down * _descentSpeed * Time.deltaTime);
+        }
+
+
+
+        if (transform.position.x >= 5f)
         {
             _moveLeft = true;
         }
@@ -40,7 +49,7 @@ public class BigEnemy : MonoBehaviour
         {
             transform.Translate(Vector3.left * _bigEnemySpeed * Time.deltaTime);
         }
-        if (transform.position.x <= -7f)
+        if (transform.position.x <= -5f)
         {
             _moveLeft = false;
         }

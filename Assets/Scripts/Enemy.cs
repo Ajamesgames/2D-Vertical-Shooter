@@ -24,13 +24,20 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _sideMovementSpeed = 8f;
 
+    private SpawnManager _spawnManager;
 
 
     private void Start()
     {
-        _playerScript = GameObject.Find("Player").transform.GetComponent<Player>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _playerScript = GameObject.Find("Player").GetComponent<Player>();
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+
+        if (_spawnManager == null)
+        {
+            Debug.Log("Spawn_Manager is null");
+        }
 
         if (_playerScript == null)
         {
@@ -107,6 +114,7 @@ public class Enemy : MonoBehaviour
             _audioSource.Play();
             _enemySpeed = 0;
             _sideMovementSpeed = 0;
+            _spawnManager.EnemiesRemainingTracker(1);
             Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 0.75f);
         }
@@ -119,6 +127,7 @@ public class Enemy : MonoBehaviour
             _sideMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
             _playerScript.AddScore(10);
+            _spawnManager.EnemiesRemainingTracker(1);
             Destroy(other.gameObject);
             Destroy(this.gameObject, 0.75f);
         }
@@ -131,6 +140,7 @@ public class Enemy : MonoBehaviour
             _sideMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
             _playerScript.AddScore(10);
+            _spawnManager.EnemiesRemainingTracker(1);
             Destroy(this.gameObject, 0.75f);
         }
 
@@ -142,6 +152,7 @@ public class Enemy : MonoBehaviour
             _sideMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
             _playerScript.AddScore(10);
+            _spawnManager.EnemiesRemainingTracker(1);
             Destroy(other.gameObject);
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject, 0.75f);

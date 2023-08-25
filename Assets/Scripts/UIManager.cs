@@ -20,8 +20,13 @@ public class UIManager : MonoBehaviour
     private Slider _thrusterSlider;
     private GameManager _gameManager;
 
+    [SerializeField]
+    private TMP_Text _levelText;
+
+
     void Start()
     {
+        _levelText.gameObject.SetActive(false);
         _livesImg[0].gameObject.SetActive(true);
         _livesImg[1].gameObject.SetActive(true);
         _livesImg[2].gameObject.SetActive(true);
@@ -100,6 +105,19 @@ public class UIManager : MonoBehaviour
     public void ThrusterSliderUpdate(float thrusterValue)
     {
         _thrusterSlider.value = thrusterValue;
+    }
+
+    public void LevelTextUpdate(int waveCount)
+    {
+        _levelText.gameObject.SetActive(true);
+        _levelText.text = "Level: " + waveCount;
+        StartCoroutine(LevelTextTurnOff());
+    }
+
+    IEnumerator LevelTextTurnOff()
+    {
+        yield return new WaitForSeconds(3f);
+        _levelText.gameObject.SetActive(false);
     }
 
 
