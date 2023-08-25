@@ -63,12 +63,15 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     private SpawnManager _spawnManager;
 
+    private int _maxAmmoCount;
+
 
     void Start()
     {
+        _maxAmmoCount = 30;
         _camOriginPos = _mainCamera.transform.position;
         _thrusterFuel = 100;
-        _ammoCount = 15;
+        _ammoCount = 30;
         _score = 0;
         transform.position = new Vector3(0, -2f, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -210,7 +213,7 @@ public class Player : MonoBehaviour
         }
 
         _ammoCount -= 1;
-        _uiManager.UpdateAmmo(_ammoCount);
+        _uiManager.UpdateAmmo(_ammoCount, _maxAmmoCount);
         _audioSource.clip = _laserSoundClip;
         _audioSource.Play();
 
@@ -351,8 +354,8 @@ public class Player : MonoBehaviour
 
     public void AmmoPowerupActivate()
     {
-        _ammoCount += 10;
-        _uiManager.UpdateAmmo(_ammoCount);
+        _ammoCount = _maxAmmoCount;
+        _uiManager.UpdateAmmo(_ammoCount, _maxAmmoCount);
     }
 
 }

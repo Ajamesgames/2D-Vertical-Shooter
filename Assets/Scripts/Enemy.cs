@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     Animator _animator;
 
     private bool _moveLeft = false;
+
     [SerializeField]
     private float _sideMovementSpeed = 8f;
 
@@ -105,6 +106,7 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
+            _sideMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 0.75f);
         }
@@ -114,6 +116,7 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
+            _sideMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
             _playerScript.AddScore(10);
             Destroy(other.gameObject);
@@ -125,6 +128,7 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
+            _sideMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
             _playerScript.AddScore(10);
             Destroy(this.gameObject, 0.75f);
@@ -135,6 +139,7 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
+            _sideMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
             _playerScript.AddScore(10);
             Destroy(other.gameObject);

@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
         _restartText.gameObject.SetActive(false);
 
         _scoreText.text = "Score: 0";
-        _ammoText.text = "Ammo: 15";
+        _ammoText.text = "Ammo: 30/30";
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
@@ -73,9 +73,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateAmmo(int ammoCount)
+    public void UpdateAmmo(int ammoCount, int maxAmmo)
     {
-        _ammoText.text = "Ammo: " + ammoCount;
+        _ammoText.text = "Ammo: " + ammoCount + "/" + maxAmmo;
     }
 
     void GameOverSequence()
