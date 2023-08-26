@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] _enemyPrefabs; //0 = wave start enemy, 1 = 1st enemy
+    private GameObject[] _enemyPrefabs; //0 = wave start enemy, 1 = 1st enemy, 2 = Enemy B,
     [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
@@ -70,7 +70,7 @@ public class SpawnManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        while (_stopSpawning == false && _enemiesToSpawn > 0)
+        while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel == 1)
         {
             Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
             GameObject newEnemy = Instantiate(_enemyPrefabs[1], _randomSpawnPos, Quaternion.identity);
@@ -78,6 +78,17 @@ public class SpawnManager : MonoBehaviour
             _enemiesToSpawn--;
             yield return new WaitForSeconds(1f);
         }
+
+        while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel >= 2)
+        {
+            Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
+            int randomEnemy = Random.Range(1, 3);
+            GameObject newEnemy = Instantiate(_enemyPrefabs[randomEnemy], _randomSpawnPos, Quaternion.identity);
+            newEnemy.transform.parent = _enemyContainer.transform;
+            _enemiesToSpawn--;
+            yield return new WaitForSeconds(1f);
+        }
+
 
         _isLevelEnding = true;
     }

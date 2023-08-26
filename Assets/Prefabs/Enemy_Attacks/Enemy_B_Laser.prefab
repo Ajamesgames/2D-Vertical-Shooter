@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 3805347599396365897}
   - component: {fileID: 1769115373904887622}
   - component: {fileID: 8841219361537271451}
-  - component: {fileID: 5767042883975463418}
+  - component: {fileID: 4395914474271368434}
   m_Layer: 0
-  m_Name: Enemy_Laser
+  m_Name: Enemy_B_Laser
   m_TagString: Enemy Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,7 +132,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5767042883975463418
+--- !u!114 &4395914474271368434
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,3 +144,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebe145e46698584e9cf41e37add19b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _laserSpeed: 8

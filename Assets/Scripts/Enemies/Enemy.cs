@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     private AudioClip _explosionClip;
     private AudioSource _audioSource;
     private Player _playerScript;
-    Animator _animator;
+    private Animator _animator;
 
     private bool _moveLeft = false;
 
