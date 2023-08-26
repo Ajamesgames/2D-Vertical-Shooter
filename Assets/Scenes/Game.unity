@@ -1172,7 +1172,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482002670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 2125244465}
@@ -1823,8 +1823,11 @@ MonoBehaviour:
   - {fileID: 4528510351080993777, guid: 1d007d6d7e40a73438d92fe837a36daf, type: 3}
   - {fileID: 4560912984318735875, guid: a96491352f6c0214f93c0fa7131f8869, type: 3}
   - {fileID: 3262250489921264471, guid: 34c339b0e08a06f46a40140681ddeca6, type: 3}
+  - {fileID: 5132387158690479451, guid: a6c17c48d1e08ce46aa3947d827d81ea, type: 3}
   _rarePowerups:
   - {fileID: 4131007755187218318, guid: e874d86b40abd5b4bb497b77a224ae54, type: 3}
+  _enemiesToSpawn: 0
+  _enemiesRemaining: 0
 --- !u!4 &1073695410
 Transform:
   m_ObjectHideFlags: 0
@@ -2363,7 +2366,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 39, y: -97.5}
+  m_AnchoredPosition: {x: 39, y: -12}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1242013906

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _playerSpeed = 5f;
+    private float _playerSpeed = 10f;
     [SerializeField]
     private float _fireRate = 0.2f;
     [SerializeField]
@@ -64,6 +64,8 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
 
     private int _maxAmmoCount;
+
+    private bool _isSlowDownActive = false;
 
 
     void Start()
@@ -139,6 +141,18 @@ public class Player : MonoBehaviour
         else
         {
             _playerSpeed = 10f;
+            _thruster.SetActive(false);
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift) && _thrusterFuel > 0 && _isSlowDownActive == true) //slowdown powerup logic
+        {
+            _playerSpeed = 10f;
+            _thruster.SetActive(true);
+            ThrusterFuelUse();
+        }
+        else if (_isSlowDownActive == true)
+        {
+            _playerSpeed = 5f;
             _thruster.SetActive(false);
         }
 
@@ -356,6 +370,18 @@ public class Player : MonoBehaviour
     {
         _ammoCount = _maxAmmoCount;
         _uiManager.UpdateAmmo(_ammoCount, _maxAmmoCount);
+    }
+
+    public void SlowDownPowerupActive()
+    {
+        _isSlowDownActive = true;
+        StartCoroutine(SlowDownTurnOffRoutine());
+    }
+
+    IEnumerator SlowDownTurnOffRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isSlowDownActive = false;
     }
 
 }

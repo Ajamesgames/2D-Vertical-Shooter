@@ -9,7 +9,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
-    private GameObject[] _powerups; //0 = speed, 1 = attack, 2 = defense, 3 = life
+    private GameObject[] _powerups; //0 = speed, 1 = attack, 2 = defense, 3 = life, 4 = Slow down,
     [SerializeField]
     private GameObject[] _rarePowerups; //0 = bomb
     private bool _stopSpawning = false;
@@ -52,8 +52,6 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnRoutine());
         StartCoroutine(SpawnPowerupRoutine());
         StartCoroutine(SpawnRarePowerupRoutine());
-
-        
     }
 
     private void NewLevelStart()
@@ -91,7 +89,7 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
-            int randomPowerup = Random.Range(0, 4);
+            int randomPowerup = Random.Range(0, 5);
             Instantiate(_powerups[randomPowerup], _randomSpawnPos, Quaternion.identity);
 
             yield return new WaitForSeconds(5f);

@@ -6,7 +6,7 @@ public class Powerup : MonoBehaviour
 {
     [SerializeField]
     private float _powerupSpeed = 2f;
-    [SerializeField] //0 = ammo, 1 = attack, 2 = defense, 3 = life powerup, 4 = bomb
+    [SerializeField] //0 = ammo, 1 = attack, 2 = defense, 3 = life powerup, 4 = bomb, 5 = Slow Down,
     private int _powerupID;
     [SerializeField]
     private AudioClip _powerupClip;
@@ -44,6 +44,9 @@ public class Powerup : MonoBehaviour
                         break;
                     case 4: //bomb
                         player.BombPowerupActive();
+                        break;
+                    case 5: //slow down
+                        player.SlowDownPowerupActive();
                         break;
                 }
 
