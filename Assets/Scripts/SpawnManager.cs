@@ -9,9 +9,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
-    private GameObject[] _powerups; //0 = speed, 1 = attack, 2 = defense, 3 = life, 4 = Slow down,
-    [SerializeField]
-    private GameObject[] _rarePowerups; //0 = bomb
+    private GameObject[] _powerups; //0 = ammo, 1 = attack, 2 = defense, 3 = life, 4 = Slow down, 5 = bomb,
     private bool _stopSpawning = false;
 
     private UIManager _uiManager;
@@ -41,6 +39,11 @@ public class SpawnManager : MonoBehaviour
             StopAllCoroutines();
         }
     }
+    private void NewLevelStart()
+    {
+        Instantiate(_enemyPrefabs[0], new Vector3(0, 8, 0), Quaternion.identity);
+        _isLevelEnding = false;
+    }
 
     public void EnemiesRemainingTracker(int enemiesDestroyed)
     {
@@ -51,16 +54,9 @@ public class SpawnManager : MonoBehaviour
     {
         StartCoroutine(SpawnRoutine());
         StartCoroutine(SpawnPowerupRoutine());
-        StartCoroutine(SpawnRarePowerupRoutine());
     }
 
-    private void NewLevelStart()
-    {
-        Instantiate(_enemyPrefabs[0], new Vector3(0, 8, 0), Quaternion.identity);
-        _isLevelEnding = false;
-    }
-
-    IEnumerator SpawnRoutine()
+    IEnumerator SpawnRoutine() //0 = wave start enemy, 1 = enemy 1, 2 = Enemy 2,
     {
         _currentLevel++;
         _enemiesToSpawn = 1 + (_currentLevel * 5);
@@ -82,42 +78,61 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel >= 2)
         {
             Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
-            int randomEnemy = Random.Range(1, 3);
-            GameObject newEnemy = Instantiate(_enemyPrefabs[randomEnemy], _randomSpawnPos, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
-            _enemiesToSpawn--;
+            int enemyProbability = Random.Range(1, 101);
+            if (enemyProbability > 50) // if 51-100 spawn enemy 1, 50% chance
+            {
+                GameObject newEnemy = Instantiate(_enemyPrefabs[1], _randomSpawnPos, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+                _enemiesToSpawn--;
+            }
+            else // if 1-50 spawn enemy 2, 50% chance
+            {
+                GameObject newEnemy = Instantiate(_enemyPrefabs[2], _randomSpawnPos, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+                _enemiesToSpawn--;
+            }
+
             yield return new WaitForSeconds(1f);
         }
-
 
         _isLevelEnding = true;
     }
 
-    IEnumerator SpawnPowerupRoutine()
+    IEnumerator SpawnPowerupRoutine()  //0 = ammo, 1 = attack, 2 = defense, 3 = life, 4 = Slow down, 5 = bomb,
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
 
         while (_stopSpawning == false)
         {
             Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
-            int randomPowerup = Random.Range(0, 5);
-            Instantiate(_powerups[randomPowerup], _randomSpawnPos, Quaternion.identity);
+            int powerupProbability = Random.Range(1, 101);
+            if (powerupProbability > 75) // if 76-100 spawn ammo powerup, 25% chance
+            {
+                Instantiate(_powerups[0], _randomSpawnPos, Quaternion.identity);
+            }
+            if (powerupProbability > 55 && powerupProbability <= 75) // if 55-75 spawn attack powerup, 20% chance
+            {
+                Instantiate(_powerups[1], _randomSpawnPos, Quaternion.identity);
+            }
+            if (powerupProbability > 35 && powerupProbability <= 55) // if 35-55 spawn defense powerup, 20% chance
+            {
+                Instantiate(_powerups[2], _randomSpawnPos, Quaternion.identity);
+            }
+            if (powerupProbability > 25 && powerupProbability <= 35) // if 25-35 spawn life powerup, 10% chance
+            {
+                Instantiate(_powerups[3], _randomSpawnPos, Quaternion.identity);
+            }
+            if (powerupProbability > 10 && powerupProbability <= 25) // if 11-25 spawn slow down powerup, 15% chance
+            {
+                Instantiate(_powerups[4], _randomSpawnPos, Quaternion.identity);
+            }
+            if (powerupProbability <= 10) // if 1-10 spawn bomb powerup, 10% chance
+            {
+                Instantiate(_powerups[5], _randomSpawnPos, Quaternion.identity);
+            }
+
 
             yield return new WaitForSeconds(5f);
-        }
-    }
-
-    IEnumerator SpawnRarePowerupRoutine()
-    {
-        yield return new WaitForSeconds(15f);
-
-        while (_stopSpawning == false)
-        {
-            Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
-            int randomPowerup = Random.Range(0, 2);
-            Instantiate(_rarePowerups[0], _randomSpawnPos, Quaternion.identity);
-
-            yield return new WaitForSeconds(30f);
         }
     }
 
