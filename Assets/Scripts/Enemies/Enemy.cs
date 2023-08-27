@@ -26,6 +26,9 @@ public class Enemy : MonoBehaviour
 
     private SpawnManager _spawnManager;
 
+    [SerializeField]
+    private GameObject _shieldVisual;
+    private bool _isShieldActive = false;
 
     private void Start()
     {
@@ -58,11 +61,23 @@ public class Enemy : MonoBehaviour
             _audioSource.clip = _explosionClip;
         }
 
+        ChanceForShield();
+
     }
     void Update()
     {
         EnemyMovement();
         EnemyFireLaser();
+    }
+
+    private void ChanceForShield()
+    {
+        int shieldProbability = Random.Range(1, 101);
+        if (shieldProbability > 50)
+        {
+            _shieldVisual.SetActive(true);
+            _isShieldActive = true;
+        }
     }
 
     void EnemyMovement()
@@ -109,6 +124,7 @@ public class Enemy : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
+            _shieldVisual.SetActive(false);
             _playerScript.Damage();
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
@@ -121,19 +137,29 @@ public class Enemy : MonoBehaviour
 
         if(other.CompareTag("Laser"))
         {
-            _animator.SetTrigger("OnEnemyDeath");
-            _audioSource.Play();
-            _enemySpeed = 0;
-            _sideMovementSpeed = 0;
-            Destroy(GetComponent<Collider2D>());
-            _playerScript.AddScore(10);
-            _spawnManager.EnemiesRemainingTracker(1);
-            Destroy(other.gameObject);
-            Destroy(this.gameObject, 0.75f);
+            if (_isShieldActive == true)
+            {
+                _shieldVisual.SetActive(false);
+                _isShieldActive = false;
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                _animator.SetTrigger("OnEnemyDeath");
+                _audioSource.Play();
+                _enemySpeed = 0;
+                _sideMovementSpeed = 0;
+                Destroy(GetComponent<Collider2D>());
+                _playerScript.AddScore(10);
+                _spawnManager.EnemiesRemainingTracker(1);
+                Destroy(other.gameObject);
+                Destroy(this.gameObject, 0.75f);
+            }
         }
 
         if(other.CompareTag("Explosion"))
         {
+            _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
@@ -146,6 +172,7 @@ public class Enemy : MonoBehaviour
 
         if(other.CompareTag("Bomb"))
         {
+            _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;

@@ -267,7 +267,6 @@ public class Player : MonoBehaviour
         {
             _isShieldActive = false;
             _shieldVisual.SetActive(false);
-            return;
         }
 
 

@@ -24,6 +24,10 @@ public class EnemyB : MonoBehaviour
     private bool _moveDown;
     private bool _moveSideways;
 
+    [SerializeField]
+    private GameObject _shieldVisual;
+    private bool _isShieldActive = false;
+
     private void Start()
     {
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -56,7 +60,8 @@ public class EnemyB : MonoBehaviour
         }
 
         StartCoroutine(SnakeMovement());
-        
+
+        ChanceForShield();
     }
 
     void Update()
@@ -65,6 +70,16 @@ public class EnemyB : MonoBehaviour
         if (_playerScript != null)
         {
             EnemyFireLaser();
+        }
+    }
+
+    private void ChanceForShield()
+    {
+        int shieldProbability = Random.Range(1, 101);
+        if (shieldProbability > 50)
+        {
+            _shieldVisual.SetActive(true);
+            _isShieldActive = true;
         }
     }
 
@@ -142,6 +157,7 @@ public class EnemyB : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _shieldVisual.SetActive(false);
             transform.localScale = new Vector3(1f, 1f, 0);
             _playerScript.Damage();
             _animator.SetTrigger("OnEnemyDeath");
@@ -154,19 +170,29 @@ public class EnemyB : MonoBehaviour
 
         if (other.CompareTag("Laser"))
         {
-            transform.localScale = new Vector3(1f, 1f, 0);
-            _animator.SetTrigger("OnEnemyDeath");
-            _audioSource.Play();
-            _enemySpeed = 0;
-            Destroy(GetComponent<Collider2D>());
-            _playerScript.AddScore(20);
-            _spawnManager.EnemiesRemainingTracker(1);
-            Destroy(other.gameObject);
-            Destroy(this.gameObject, 0.75f);
+            if (_isShieldActive == true)
+            {
+                _shieldVisual.SetActive(false);
+                _isShieldActive = false;
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                transform.localScale = new Vector3(1f, 1f, 0);
+                _animator.SetTrigger("OnEnemyDeath");
+                _audioSource.Play();
+                _enemySpeed = 0;
+                Destroy(GetComponent<Collider2D>());
+                _playerScript.AddScore(20);
+                _spawnManager.EnemiesRemainingTracker(1);
+                Destroy(other.gameObject);
+                Destroy(this.gameObject, 0.75f);
+            }
         }
 
         if (other.CompareTag("Explosion"))
         {
+            _shieldVisual.SetActive(false);
             transform.localScale = new Vector3(1f, 1f, 0);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
@@ -179,6 +205,7 @@ public class EnemyB : MonoBehaviour
 
         if (other.CompareTag("Bomb"))
         {
+            _shieldVisual.SetActive(false);
             transform.localScale = new Vector3(1f, 1f, 0);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
