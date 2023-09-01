@@ -9,6 +9,7 @@ TagManager:
   - Enemy Laser
   - Bomb
   - Explosion
+  - Laserbeam
   layers:
   - Default
   - TransparentFX

@@ -30,12 +30,22 @@ public class Enemy : MonoBehaviour
     private GameObject _shieldVisual;
     private bool _isShieldActive = false;
 
+    private bool _canRamPlayer = false;
+    private BoxCollider2D _playerCollider;
+    private Vector3 _playerPos;
+
     private void Start()
     {
+        _playerCollider = GameObject.Find("Player").GetComponent<BoxCollider2D>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _playerScript = GameObject.Find("Player").GetComponent<Player>();
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+
+        if (_playerCollider == null)
+        {
+            Debug.Log("player collider is null");
+        }
 
         if (_spawnManager == null)
         {
@@ -66,7 +76,16 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
-        EnemyMovement();
+        EnemyRamPlayerDetect();
+        if (_canRamPlayer == true)
+        {
+            EnemyRamMovement();
+        }
+        else
+        {
+            EnemyMovement();
+        }
+
         EnemyFireLaser();
     }
 
@@ -84,7 +103,7 @@ public class Enemy : MonoBehaviour
     {
         transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
-        if (transform.position.y < -6)
+        if (transform.position.y <= -7)
         {
             float randomX = Random.Range(-7.25f, 7.25f);    
 
@@ -185,4 +204,28 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject, 0.75f);
         }
     }
+
+    private void EnemyRamPlayerDetect()
+    {
+       Collider2D hitColliders = Physics2D.OverlapCircle(transform.position, 2.5f);
+
+            if (hitColliders == _playerCollider)
+            {
+               _canRamPlayer = true;
+               _playerPos = _playerCollider.transform.position;
+            }
+    }
+
+    private void EnemyRamMovement()
+    {
+        transform.Translate((_playerPos - transform.position).normalized * _enemySpeed * Time.deltaTime);
+        StartCoroutine(StopEnemyRam());
+    }
+
+    IEnumerator StopEnemyRam()
+    {
+        yield return new WaitForSeconds(1f);
+        _canRamPlayer = false;
+    }
+
 }

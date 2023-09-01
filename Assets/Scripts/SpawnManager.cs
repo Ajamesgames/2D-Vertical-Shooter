@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] _enemyPrefabs; //0 = wave start enemy, 1 = 1st enemy, 2 = Enemy B,
+    private GameObject[] _enemyPrefabs; //0 = wave start enemy, 1 = 1st enemy, 2 = Enemy B, 3 = enemy C
     [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
@@ -56,7 +56,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerupRoutine());
     }
 
-    IEnumerator SpawnRoutine() //0 = wave start enemy, 1 = enemy 1, 2 = Enemy 2,
+    IEnumerator SpawnRoutine() //0 = wave start enemy, 1 = enemy 1, 2 = Enemy 2, 3 = enemy 3
     {
         _currentLevel++;
         _enemiesToSpawn = 1 + (_currentLevel * 5);
@@ -75,7 +75,7 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel >= 2)
+        while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel == 2)
         {
             Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
             int enemyProbability = Random.Range(1, 101);
@@ -92,6 +92,16 @@ public class SpawnManager : MonoBehaviour
                 _enemiesToSpawn--;
             }
 
+            yield return new WaitForSeconds(1f);
+        }
+
+        while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel >= 3)
+        {
+            Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
+            int enemyProbability = Random.Range(1, 4);
+            GameObject newEnemy = Instantiate(_enemyPrefabs[enemyProbability], _randomSpawnPos, Quaternion.identity);
+            newEnemy.transform.parent = _enemyContainer.transform;
+            _enemiesToSpawn--;
             yield return new WaitForSeconds(1f);
         }
 
