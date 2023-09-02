@@ -6,8 +6,8 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _enemySpeed = 4f;
-    private float _fireRate = 3f;
-    private float _canFire = 0f;
+    //private float _fireRate = 3f;
+    //private float _canFire = 0f;
     private Vector3 _laserOffset = new Vector3(0, -1, 0);
     [SerializeField]
     private GameObject _enemyLaserPrefab;
@@ -33,6 +33,9 @@ public class Enemy : MonoBehaviour
     private bool _canRamPlayer = false;
     private BoxCollider2D _playerCollider;
     private Vector3 _playerPos;
+
+    private bool _detectedTarget = false;
+    private bool _canFireLaser = true;
 
     private void Start()
     {
@@ -76,6 +79,7 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
+
         EnemyRamPlayerDetect();
         if (_canRamPlayer == true)
         {
@@ -86,6 +90,7 @@ public class Enemy : MonoBehaviour
             EnemyMovement();
         }
 
+        EnemyLaserDetection();
         EnemyFireLaser();
     }
 
@@ -97,6 +102,32 @@ public class Enemy : MonoBehaviour
             _shieldVisual.SetActive(true);
             _isShieldActive = true;
         }
+    }
+
+    private void EnemyRamPlayerDetect()
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, 2.5f);
+
+        foreach (Collider2D hitDetected in hitColliders)
+        {
+            if (hitDetected == _playerCollider)
+            {
+                _canRamPlayer = true;
+                _playerPos = _playerCollider.transform.position;
+            }
+        }
+    }
+
+    private void EnemyRamMovement()
+    {
+        transform.Translate((_playerPos - transform.position).normalized * _enemySpeed * Time.deltaTime);
+        StartCoroutine(StopEnemyRam());
+    }
+
+    IEnumerator StopEnemyRam()
+    {
+        yield return new WaitForSeconds(1f);
+        _canRamPlayer = false;
     }
 
     void EnemyMovement()
@@ -129,14 +160,43 @@ public class Enemy : MonoBehaviour
 
     }
 
+    private void EnemyLaserDetection()
+    {
+        RaycastHit2D[] hit = Physics2D.RaycastAll(transform.position, Vector2.down);
+
+        foreach (RaycastHit2D hitDetect in hit)
+        {
+            if (hitDetect.collider == _playerCollider || hitDetect.collider.CompareTag("Powerup"))
+            {
+                _detectedTarget = true;
+            }
+        }
+    }
+
     private void EnemyFireLaser()
     {
-        if (Time.time > _canFire)
+        if (_detectedTarget == true && _canFireLaser == true)
         {
-            _fireRate = Random.Range(3f, 7f);
-            _canFire = Time.time + _fireRate;
-            Instantiate(_enemyLaserPrefab, (transform.position + _laserOffset), Quaternion.identity);
+            StartCoroutine(EnemyFireLaserRoutine());
         }
+
+        // if (Time.time > _canFire && _detectedTarget == true)
+        // {
+        //  _fireRate = Random.Range(3f, 7f);
+        //  _canFire = Time.time + _fireRate;
+        //  Instantiate(_enemyLaserPrefab, (transform.position + _laserOffset), Quaternion.identity);
+        //   _detectedTarget = false;
+        //  }
+
+    }
+
+    IEnumerator EnemyFireLaserRoutine()
+    {
+        Instantiate(_enemyLaserPrefab, (transform.position + _laserOffset), Quaternion.identity);
+        _canFireLaser = false;
+        yield return new WaitForSeconds(Random.Range(3f, 5f));
+        _detectedTarget = false;
+        _canFireLaser = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -205,27 +265,5 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void EnemyRamPlayerDetect()
-    {
-       Collider2D hitColliders = Physics2D.OverlapCircle(transform.position, 2.5f);
-
-            if (hitColliders == _playerCollider)
-            {
-               _canRamPlayer = true;
-               _playerPos = _playerCollider.transform.position;
-            }
-    }
-
-    private void EnemyRamMovement()
-    {
-        transform.Translate((_playerPos - transform.position).normalized * _enemySpeed * Time.deltaTime);
-        StartCoroutine(StopEnemyRam());
-    }
-
-    IEnumerator StopEnemyRam()
-    {
-        yield return new WaitForSeconds(1f);
-        _canRamPlayer = false;
-    }
 
 }

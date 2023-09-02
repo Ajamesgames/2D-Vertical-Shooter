@@ -10,6 +10,7 @@ TagManager:
   - Bomb
   - Explosion
   - Laserbeam
+  - Powerup
   layers:
   - Default
   - TransparentFX

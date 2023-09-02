@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemyLaserbeam : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _enemy;
     private EnemyC _enemyScript;
     private Player _playerScript;
 
@@ -14,7 +12,7 @@ public class EnemyLaserbeam : MonoBehaviour
 
     void Start()
     {
-        _enemyScript = _enemy.GetComponent<EnemyC>();
+        _enemyScript = transform.parent.GetComponent<EnemyC>();
         _playerScript = GameObject.Find("Player").GetComponent<Player>();
 
         if (_playerScript == null)
