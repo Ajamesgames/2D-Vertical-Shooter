@@ -124,6 +124,8 @@ public class Player : MonoBehaviour
             StartCoroutine(CameraShakeRoutine());
         }
 
+        VacuumPowerups();
+
     }
 
     void CalculateMovement()
@@ -382,5 +384,19 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5f);
         _isSlowDownActive = false;
     }
+
+    private void VacuumPowerups()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            GameObject[] _powerupsLocated = GameObject.FindGameObjectsWithTag("Powerup");
+            foreach (GameObject _powerup in _powerupsLocated)
+            {
+                Powerup _powerupScript = _powerup.GetComponent<Powerup>();
+                _powerupScript.GoToPlayerPosition();
+            }
+        }
+    }
+
 
 }

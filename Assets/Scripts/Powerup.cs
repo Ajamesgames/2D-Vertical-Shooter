@@ -11,14 +11,31 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private AudioClip _powerupClip;
 
+    private bool _hasBeenSuckedIn = false;
+    private Vector3 _playerPos;
+
+
     void Update()
     {
-        transform.Translate(Vector3.down * _powerupSpeed * Time.deltaTime);
+        if (_hasBeenSuckedIn == true)
+        {
+            transform.Translate((_playerPos - transform.position).normalized * 10 * Time.deltaTime);
+        }
+        else
+        {
+            transform.Translate(Vector3.down * _powerupSpeed * Time.deltaTime);
+        }
 
         if (transform.position.y < -6)
         {
             Destroy(this.gameObject);
         }
+    }
+
+    public void GoToPlayerPosition()
+    {
+        _hasBeenSuckedIn = true;
+        _playerPos = GameObject.Find("Player").transform.position;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
