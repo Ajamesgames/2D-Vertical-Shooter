@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class EnemyD : MonoBehaviour
 {
     [SerializeField]
     private float _enemySpeed = 4f;
-    private Vector3 _laserOffset = new Vector3(0, -1, 0);
     [SerializeField]
-    private GameObject _enemyLaserPrefab;
+    private GameObject _enemySpreadLaserPrefab;
     [SerializeField]
     private GameObject _explosionPrefab;
     [SerializeField]
@@ -16,37 +15,30 @@ public class Enemy : MonoBehaviour
     private AudioSource _audioSource;
     private Player _playerScript;
     private Animator _animator;
-
-    private bool _moveLeft = false;
-
-    [SerializeField]
-    private float _sideMovementSpeed = 8f;
-
     private SpawnManager _spawnManager;
-
+    [SerializeField]
     private GameObject _shieldVisual;
     private bool _isShieldActive = false;
-
-    private bool _canRamPlayer = false;
     private BoxCollider2D _playerCollider;
-    private Vector3 _playerPos;
-
     private bool _detectedTarget = false;
     private bool _canFireLaser = true;
+
+    private bool _moveLeft = false;
+    private bool _moveUp = false;
+    private bool _isDodgingLaser = false;
+    private bool _canDodgeLaser = true;
+    [SerializeField]
+    private float _dodgeMovementSpeed = 8f;
+    [SerializeField]
+    private GameObject _thrusterVisual;
 
     private void Start()
     {
         _playerCollider = GameObject.Find("Player").GetComponent<BoxCollider2D>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _playerScript = GameObject.Find("Player").GetComponent<Player>();
-        _animator = this.gameObject.transform.GetComponent<Animator>();
-        _audioSource = this.gameObject.transform.GetComponent<AudioSource>();
-        _shieldVisual = gameObject.transform.GetChild(0).gameObject;
-
-        if (_shieldVisual == null)
-        {
-            Debug.Log("Shield visual is null");
-        }
+        _animator = gameObject.transform.GetComponent<Animator>();
+        _audioSource = gameObject.transform.GetComponent<AudioSource>();
 
         if (_playerCollider == null)
         {
@@ -82,16 +74,8 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
-
-        EnemyRamPlayerDetect();
-        if (_canRamPlayer == true)
-        {
-            EnemyRamMovement();
-        }
-        else
-        {
-            EnemyMovement();
-        }
+        EnemyDodgeLaserDetect();
+        EnemyMovement();
 
         EnemyLaserDetection();
         EnemyFireLaser();
@@ -107,50 +91,51 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void EnemyRamPlayerDetect()
+    private void EnemyDodgeLaserDetect()
     {
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, 2.5f);
 
         foreach (Collider2D hitDetected in hitColliders)
         {
-            if (hitDetected == _playerCollider)
+            if (hitDetected.CompareTag("Laser"))
             {
-                _canRamPlayer = true;
-                _playerPos = _playerCollider.transform.position;
+                _isDodgingLaser = true;
             }
         }
     }
 
-    private void EnemyRamMovement()
-    {
-        transform.Translate((_playerPos - transform.position).normalized * _enemySpeed * Time.deltaTime);
-        StartCoroutine(StopEnemyRam());
-    }
-
-    IEnumerator StopEnemyRam()
-    {
-        yield return new WaitForSeconds(1f);
-        _canRamPlayer = false;
-    }
-
     void EnemyMovement()
     {
-        transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-
-        if (transform.position.y <= -7)
+        if (_isDodgingLaser == true && _canDodgeLaser == true)
         {
-            float randomX = Random.Range(-7.25f, 7.25f);    
-
-            transform.position = new Vector3(randomX, 7.5f, 0);
+            StartCoroutine(DodgeLaserRoutine());
         }
 
+        //vertical movement
+        if (transform.position.y <= 0.5f)
+        {
+            _moveUp = true;
+        }
+        if (_moveUp == true)
+        {
+            transform.Translate(Vector3.up * _enemySpeed * Time.deltaTime);
+        }
+        if (transform.position.y >= 4.5)
+        {
+            _moveUp = false;
+        }
+        if (_moveUp == false)
+        {
+            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+        }
+        //horizontal movement
         if (transform.position.x >= 7f)
         {
             _moveLeft = true;
         }
         if (_moveLeft == true)
         {
-            transform.Translate(Vector3.left * _sideMovementSpeed * Time.deltaTime);
+            transform.Translate(Vector3.left * _enemySpeed * Time.deltaTime);
         }
         if (transform.position.x <= -7f)
         {
@@ -158,9 +143,38 @@ public class Enemy : MonoBehaviour
         }
         if (_moveLeft == false)
         {
-            transform.Translate(Vector3.right * _sideMovementSpeed * Time.deltaTime);
+            transform.Translate(Vector3.right * _enemySpeed * Time.deltaTime);
         }
 
+        if (transform.position.y <= -7)
+        {
+            float randomX = Random.Range(-7.25f, 7.25f);
+
+            transform.position = new Vector3(randomX, 7.5f, 0);
+        }
+
+    }
+
+    IEnumerator DodgeLaserRoutine()
+    {
+        if (_moveLeft == true)
+        {
+            _moveLeft = false;
+            _canDodgeLaser = false;
+        }
+        else if (_moveLeft == false)
+        {
+            _moveLeft = true;
+            _canDodgeLaser = false;
+        }
+
+        _enemySpeed = _dodgeMovementSpeed;
+        _thrusterVisual.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        _thrusterVisual.SetActive(false);
+        _isDodgingLaser = false;
+        _canDodgeLaser = true;
+        _enemySpeed = 4f;
     }
 
     private void EnemyLaserDetection()
@@ -182,20 +196,11 @@ public class Enemy : MonoBehaviour
         {
             StartCoroutine(EnemyFireLaserRoutine());
         }
-
-        // if (Time.time > _canFire && _detectedTarget == true)
-        // {
-        //  _fireRate = Random.Range(3f, 7f);
-        //  _canFire = Time.time + _fireRate;
-        //  Instantiate(_enemyLaserPrefab, (transform.position + _laserOffset), Quaternion.identity);
-        //   _detectedTarget = false;
-        //  }
-
     }
 
     IEnumerator EnemyFireLaserRoutine()
     {
-        Instantiate(_enemyLaserPrefab, (transform.position + _laserOffset), Quaternion.identity);
+        Instantiate(_enemySpreadLaserPrefab, transform.position, Quaternion.identity);
         _canFireLaser = false;
         yield return new WaitForSeconds(Random.Range(3f, 5f));
         _detectedTarget = false;
@@ -204,20 +209,20 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             _shieldVisual.SetActive(false);
             _playerScript.Damage();
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
-            _sideMovementSpeed = 0;
+            _dodgeMovementSpeed = 0;
             _spawnManager.EnemiesRemainingTracker(1);
             Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 0.75f);
         }
 
-        if(other.CompareTag("Laser"))
+        if (other.CompareTag("Laser"))
         {
             if (_isShieldActive == true)
             {
@@ -230,43 +235,42 @@ public class Enemy : MonoBehaviour
                 _animator.SetTrigger("OnEnemyDeath");
                 _audioSource.Play();
                 _enemySpeed = 0;
-                _sideMovementSpeed = 0;
+                _dodgeMovementSpeed = 0;
                 Destroy(GetComponent<Collider2D>());
-                _playerScript.AddScore(10);
+                _playerScript.AddScore(40);
                 _spawnManager.EnemiesRemainingTracker(1);
                 Destroy(other.gameObject);
                 Destroy(this.gameObject, 0.75f);
             }
         }
 
-        if(other.CompareTag("Explosion"))
+        if (other.CompareTag("Explosion"))
         {
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
-            _sideMovementSpeed = 0;
+            _dodgeMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
-            _playerScript.AddScore(10);
+            _playerScript.AddScore(40);
             _spawnManager.EnemiesRemainingTracker(1);
             Destroy(this.gameObject, 0.75f);
         }
 
-        if(other.CompareTag("Bomb"))
+        if (other.CompareTag("Bomb"))
         {
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
-            _sideMovementSpeed = 0;
+            _dodgeMovementSpeed = 0;
             Destroy(GetComponent<Collider2D>());
-            _playerScript.AddScore(10);
+            _playerScript.AddScore(40);
             _spawnManager.EnemiesRemainingTracker(1);
             Destroy(other.gameObject);
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject, 0.75f);
         }
     }
-
 
 }

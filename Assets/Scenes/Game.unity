@@ -1172,7 +1172,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482002670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -2, z: 0}
+  m_LocalPosition: {x: -0, y: -4.44, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 2125244465}
@@ -1819,6 +1819,7 @@ MonoBehaviour:
   - {fileID: 8928828296152145538, guid: a0c070271e64c94428e970e32162ac07, type: 3}
   - {fileID: 5495659520433869280, guid: e39d37006069fe44c8cf7eca6e7eae01, type: 3}
   - {fileID: 8761580536737784919, guid: af44a0e73f06f42449eb34b10df28c3d, type: 3}
+  - {fileID: 71258521483440252, guid: e2913bf1225340a479815e076268df6b, type: 3}
   _enemyContainer: {fileID: 559813379}
   _powerups:
   - {fileID: 5619324047396184022, guid: 21e78b21d4647aa429b65e15053d45a9, type: 3}

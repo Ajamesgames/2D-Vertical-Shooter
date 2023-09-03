@@ -176,7 +176,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0651f0f1a8dc71488d9946d987eb9a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemy: {fileID: 8761580536737784919}
 --- !u!1 &1723505028
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +364,6 @@ MonoBehaviour:
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _shieldVisual: {fileID: 8761580537217783424}
   _laserBeam: {fileID: 1352291719}
-  _player: {fileID: 0}
   _laserbeamClip: {fileID: 8300000, guid: 4f8d28937409e8b44a33810d588f9e87, type: 3}
 --- !u!61 &8761580536737784915
 BoxCollider2D:
@@ -541,7 +539,7 @@ GameObject:
   - component: {fileID: 8761580537217783486}
   - component: {fileID: 8761580537217783425}
   m_Layer: 0
-  m_Name: Enemy_Shield
+  m_Name: EnemyC_Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

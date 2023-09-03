@@ -36,8 +36,8 @@ public class EnemyC : MonoBehaviour
         _player = GameObject.Find("Player");
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _playerScript = GameObject.Find("Player").GetComponent<Player>();
-        _animator = GetComponent<Animator>();
-        _audioSource = GetComponent<AudioSource>();
+        _animator = gameObject.GetComponent<Animator>();
+        _audioSource = gameObject.GetComponent<AudioSource>();
 
         if (_spawnManager == null)
         {
@@ -168,7 +168,7 @@ public class EnemyC : MonoBehaviour
                 _audioSource.Play();
                 _enemySpeed = 0;
                 Destroy(GetComponent<Collider2D>());
-                _playerScript.AddScore(10);
+                _playerScript.AddScore(30);
                 _spawnManager.EnemiesRemainingTracker(1);
                 Destroy(other.gameObject);
                 Destroy(this.gameObject, 0.75f);
@@ -183,7 +183,7 @@ public class EnemyC : MonoBehaviour
             _audioSource.Play();
             _enemySpeed = 0;
             Destroy(GetComponent<Collider2D>());
-            _playerScript.AddScore(10);
+            _playerScript.AddScore(30);
             _spawnManager.EnemiesRemainingTracker(1);
             Destroy(this.gameObject, 0.75f);
         }
@@ -196,7 +196,7 @@ public class EnemyC : MonoBehaviour
             _audioSource.Play();
             _enemySpeed = 0;
             Destroy(GetComponent<Collider2D>());
-            _playerScript.AddScore(10);
+            _playerScript.AddScore(30);
             _spawnManager.EnemiesRemainingTracker(1);
             Destroy(other.gameObject);
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);

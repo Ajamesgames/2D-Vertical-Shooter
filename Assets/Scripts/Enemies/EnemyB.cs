@@ -32,8 +32,8 @@ public class EnemyB : MonoBehaviour
     {
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _playerScript = GameObject.Find("Player").GetComponent<Player>();
-        _animator = GetComponent<Animator>();
-        _audioSource = GetComponent<AudioSource>();
+        _animator = gameObject.GetComponent<Animator>();
+        _audioSource = gameObject.GetComponent<AudioSource>();
 
         if (_spawnManager == null)
         {
