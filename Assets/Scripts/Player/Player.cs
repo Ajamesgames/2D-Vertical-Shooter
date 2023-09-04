@@ -67,6 +67,12 @@ public class Player : MonoBehaviour
 
     private bool _isSlowDownActive = false;
 
+    [SerializeField]
+    private GameObject _homingLaserPrefab;
+    [SerializeField]
+    private bool _isHomingLaserActive = false;
+
+
 
     void Start()
     {
@@ -214,6 +220,10 @@ public class Player : MonoBehaviour
         if (_isBombActive == true)
         {
             Instantiate(_bombPrefab, (transform.position + _laserOffSet), Quaternion.identity);
+        }
+        else if (_isHomingLaserActive == true)
+        {
+            Instantiate(_homingLaserPrefab, (transform.position + _laserOffSet), Quaternion.identity);
         }
         else if (_isTripleShotActive == true)
         {
@@ -396,6 +406,17 @@ public class Player : MonoBehaviour
                 _powerupScript.GoToPlayerPosition();
             }
         }
+    }
+
+    public void HomingLaserPowerupActive()
+    {
+        _isHomingLaserActive = true;
+        StartCoroutine(HomingPowerupCountdownRoutine());
+    }
+    IEnumerator HomingPowerupCountdownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isHomingLaserActive = false;
     }
 
 

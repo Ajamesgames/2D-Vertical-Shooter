@@ -5,11 +5,11 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] _enemyPrefabs; //0 = wave start enemy, 1 = 1st enemy, 2 = Enemy B, 3 = enemy C, 4 = enemy D
+    private GameObject[] _enemyPrefabs; //0 = wave start enemy, 1 = 1st enemy, 2 = Enemy B, 3 = enemy C, 4 = enemy D.
     [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
-    private GameObject[] _powerups; //0 = ammo, 1 = attack, 2 = defense, 3 = life, 4 = Slow down, 5 = bomb,
+    private GameObject[] _powerups; //0 = ammo, 1 = attack, 2 = defense, 3 = life, 4 = Slow down, 5 = bomb, 6 = homing.
     private bool _stopSpawning = false;
 
     private UIManager _uiManager;
@@ -118,7 +118,7 @@ public class SpawnManager : MonoBehaviour
         _isLevelEnding = true;
     }
 
-    IEnumerator SpawnPowerupRoutine()  //0 = ammo, 1 = attack, 2 = defense, 3 = life, 4 = Slow down, 5 = bomb,
+    IEnumerator SpawnPowerupRoutine()  //0 = ammo, 1 = attack, 2 = defense, 3 = life, 4 = Slow down, 5 = bomb, 6 = homing.
     {
         yield return new WaitForSeconds(3f);
 
@@ -126,29 +126,33 @@ public class SpawnManager : MonoBehaviour
         {
             Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
             int powerupProbability = Random.Range(1, 101);
-            if (powerupProbability > 75) // if 76-100 spawn ammo powerup, 25% chance
+            if (powerupProbability > 80) //ammo powerup, 20% chance
             {
                 Instantiate(_powerups[0], _randomSpawnPos, Quaternion.identity);
             }
-            if (powerupProbability > 55 && powerupProbability <= 75) // if 55-75 spawn attack powerup, 20% chance
+            if (powerupProbability > 60 && powerupProbability <= 80) //attack powerup, 20% chance
             {
                 Instantiate(_powerups[1], _randomSpawnPos, Quaternion.identity);
             }
-            if (powerupProbability > 35 && powerupProbability <= 55) // if 35-55 spawn defense powerup, 20% chance
+            if (powerupProbability > 40 && powerupProbability <= 60) //defense powerup, 20% chance
             {
                 Instantiate(_powerups[2], _randomSpawnPos, Quaternion.identity);
             }
-            if (powerupProbability > 25 && powerupProbability <= 35) // if 25-35 spawn life powerup, 10% chance
+            if (powerupProbability > 30 && powerupProbability <= 40) //life powerup, 10% chance
             {
                 Instantiate(_powerups[3], _randomSpawnPos, Quaternion.identity);
             }
-            if (powerupProbability > 10 && powerupProbability <= 25) // if 11-25 spawn slow down powerup, 15% chance
+            if (powerupProbability > 20 && powerupProbability <= 30) //slow down powerup, 10% chance
             {
                 Instantiate(_powerups[4], _randomSpawnPos, Quaternion.identity);
             }
-            if (powerupProbability <= 10) // if 1-10 spawn bomb powerup, 10% chance
+            if (powerupProbability > 10 && powerupProbability <= 20) //bomb powerup, 10% chance
             {
                 Instantiate(_powerups[5], _randomSpawnPos, Quaternion.identity);
+            }
+            if (powerupProbability <= 10) //homing powerup, 10% chance
+            {
+                Instantiate(_powerups[6], _randomSpawnPos, Quaternion.identity);
             }
 
 

@@ -145,14 +145,6 @@ public class EnemyD : MonoBehaviour
         {
             transform.Translate(Vector3.right * _enemySpeed * Time.deltaTime);
         }
-
-        if (transform.position.y <= -7)
-        {
-            float randomX = Random.Range(-7.25f, 7.25f);
-
-            transform.position = new Vector3(randomX, 7.5f, 0);
-        }
-
     }
 
     IEnumerator DodgeLaserRoutine()
