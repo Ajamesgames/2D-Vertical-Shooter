@@ -11,10 +11,30 @@ public class EnemyDSpreadLaser : MonoBehaviour
     {
         transform.Translate(-transform.up * _laserSpeed * Time.deltaTime);
 
-        if (transform.position.y < -12)
+        if (transform.position.y < -15)
         {
             Destroy(transform.parent.gameObject);
             Destroy(this.gameObject);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Laser"))
+        {
+            Destroy(other.gameObject);
+            Destroy(this.gameObject);
+        }
+
+        if (other.CompareTag("Explosion"))
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (other.CompareTag("Bomb"))
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
 }

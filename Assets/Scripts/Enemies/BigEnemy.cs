@@ -68,6 +68,24 @@ public class BigEnemy : MonoBehaviour
             _spawnManager.StartSpawning();
             Destroy(this.gameObject);
         }
+        if (collision.CompareTag("Player"))
+        {
+            Player _playerScript = collision.GetComponent<Player>();
+
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(collision.gameObject);
+            _spawnManager.StartSpawning();
+            _playerScript.Damage();
+            Destroy(this.gameObject);
+        }
+
+        if (collision.CompareTag("Bomb"))
+        {
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(collision.gameObject);
+            _spawnManager.StartSpawning();
+            Destroy(this.gameObject);
+        }
     }
 }
 

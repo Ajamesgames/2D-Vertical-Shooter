@@ -65,7 +65,7 @@ public class Powerup : MonoBehaviour
                     case 5: //slow down
                         player.SlowDownPowerupActive();
                         break;
-                    case 6:
+                    case 6: //homing
                         player.HomingLaserPowerupActive();
                         break;
                 }

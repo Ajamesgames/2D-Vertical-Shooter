@@ -23,6 +23,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _levelText;
 
+    [SerializeField]
+    private Slider _bossHealthSlider;
+    [SerializeField]
+    private TMP_Text _youWinText;
+
 
     void Start()
     {
@@ -32,6 +37,7 @@ public class UIManager : MonoBehaviour
         _livesImg[2].gameObject.SetActive(true);
         _gameoverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
+        _youWinText.gameObject.SetActive(false);
 
         _scoreText.text = "Score: 0";
         _ammoText.text = "Ammo: 30/30";
@@ -120,5 +126,27 @@ public class UIManager : MonoBehaviour
         _levelText.gameObject.SetActive(false);
     }
 
+    public void BossHealthSliderUpdate(int bossHealth)
+    {
+        _bossHealthSlider.value = bossHealth;
+    }
+
+    public void YouWinScreen()
+    {
+        StartCoroutine(YouWinFlicker());
+        _restartText.gameObject.SetActive(true);
+        _gameManager.GameOver();
+    }
+
+    IEnumerator YouWinFlicker()
+    {
+        while (true)
+        {
+            _youWinText.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            _youWinText.gameObject.SetActive(false);
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
 
 }

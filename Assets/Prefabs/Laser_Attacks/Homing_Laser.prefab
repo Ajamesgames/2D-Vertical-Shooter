@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _laserSpeed: 8
-  _rotateSpeed: 100
+  _rotateSpeed: 300
 --- !u!61 &6378814375043788971
 BoxCollider2D:
   m_ObjectHideFlags: 0
