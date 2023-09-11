@@ -76,10 +76,10 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        _maxAmmoCount = 30;
+        _maxAmmoCount = 40;
+        _ammoCount = _maxAmmoCount;
         _camOriginPos = _mainCamera.transform.position;
         _thrusterFuel = 100;
-        _ammoCount = 30;
         _score = 0;
         transform.position = new Vector3(0, -2f, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -176,13 +176,13 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(transform.position.x, -5, 0);
         }
 
-        if (transform.position.x > 7.5f)
+        if (transform.position.x > 5.15f)
         {
-            transform.position = new Vector3(7.5f, transform.position.y, 0);
+            transform.position = new Vector3(5.15f, transform.position.y, 0);
         }
-        else if (transform.position.x < -7.5f)
+        else if (transform.position.x < -5.15f)
         {
-            transform.position = new Vector3(-7.5f, transform.position.y, 0);
+            transform.position = new Vector3(-5.15f, transform.position.y, 0);
         }
     }
 
@@ -239,7 +239,7 @@ public class Player : MonoBehaviour
         }
 
         _ammoCount -= 1;
-        _uiManager.UpdateAmmo(_ammoCount, _maxAmmoCount);
+        _uiManager.UpdateAmmo(_ammoCount);
         _audioSource.clip = _laserSoundClip;
         _audioSource.Play();
 
@@ -351,13 +351,20 @@ public class Player : MonoBehaviour
 
     public void LaserPowerupActive()
     {
-        _isDoubleShotActive = true;
-        StartCoroutine(PowerupCountdownRoutine());
-    }
-    IEnumerator PowerupCountdownRoutine()
-    {
-        yield return new WaitForSeconds(5f);
-        _isDoubleShotActive = false;
+        if (_isDoubleShotActive == false)
+        {
+            _isDoubleShotActive = true;
+        }
+        else if (_isDoubleShotActive == true && _isTripleShotActive == false)
+        {
+            _isTripleShotActive = true;
+        }
+        else if (_isDoubleShotActive == true && _isTripleShotActive == true)
+        {
+            _ammoCount = _maxAmmoCount;
+            _uiManager.UpdateAmmo(_ammoCount);
+        }
+        //attack powerup is permanent, gives double shot, then triple shot, then replenishes ammo instead at max strength
     }
 
     public void BombPowerupActive()
@@ -380,7 +387,7 @@ public class Player : MonoBehaviour
     public void AmmoPowerupActivate()
     {
         _ammoCount = _maxAmmoCount;
-        _uiManager.UpdateAmmo(_ammoCount, _maxAmmoCount);
+        _uiManager.UpdateAmmo(_ammoCount);
     }
 
     public void SlowDownPowerupActive()
@@ -397,7 +404,7 @@ public class Player : MonoBehaviour
 
     private void VacuumPowerups()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             GameObject[] _powerupsLocated = GameObject.FindGameObjectsWithTag("Powerup");
             foreach (GameObject _powerup in _powerupsLocated)

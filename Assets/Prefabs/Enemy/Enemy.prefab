@@ -151,14 +151,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef7c1f90199d7746b814e9dd005fa56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemySpeed: 4
+  _enemySpeed: 2.5
   _enemyLaserPrefab: {fileID: 8312650121625668393, guid: 9af11b422aa7a894f9a27a4c1ad1130c,
     type: 3}
   _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
     type: 3}
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _sideMovementSpeed: 8
-  _shieldVisual: {fileID: 3511904871954228273}
 --- !u!61 &4392759673163770662
 BoxCollider2D:
   m_ObjectHideFlags: 0

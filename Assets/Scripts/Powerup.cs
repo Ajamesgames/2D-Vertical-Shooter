@@ -5,7 +5,7 @@ using UnityEngine;
 public class Powerup : MonoBehaviour
 {
     [SerializeField]
-    private float _powerupSpeed = 2f;
+    private float _powerupSpeed = 3f;
     [SerializeField] //0 = ammo, 1 = attack, 2 = defense, 3 = life powerup, 4 = bomb, 5 = Slow Down, 6 = homing.
     private int _powerupID;
     [SerializeField]
@@ -26,7 +26,7 @@ public class Powerup : MonoBehaviour
             transform.Translate(Vector3.down * _powerupSpeed * Time.deltaTime);
         }
 
-        if (transform.position.y < -6)
+        if (transform.position.y < -7)
         {
             Destroy(this.gameObject);
         }
@@ -36,6 +36,13 @@ public class Powerup : MonoBehaviour
     {
         _hasBeenSuckedIn = true;
         _playerPos = GameObject.Find("Player").transform.position;
+        StartCoroutine(ResumeNormalMovement());
+    }
+
+    IEnumerator ResumeNormalMovement()
+    {
+        yield return new WaitForSeconds(1f);
+        _hasBeenSuckedIn = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

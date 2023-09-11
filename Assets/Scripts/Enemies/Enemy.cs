@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _enemySpeed = 4f;
+    private float _enemySpeed = 2.5f;
     private Vector3 _laserOffset = new Vector3(0, -1, 0);
     [SerializeField]
     private GameObject _enemyLaserPrefab;
@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     private Player _playerScript;
     private Animator _animator;
 
-    private bool _moveLeft = false;
+    private bool _moveLeft;
 
     [SerializeField]
     private float _sideMovementSpeed = 8f;
@@ -33,6 +33,8 @@ public class Enemy : MonoBehaviour
 
     private bool _detectedTarget = false;
     private bool _canFireLaser = true;
+
+    private bool _isDead = false;
 
     private void Start()
     {
@@ -79,10 +81,18 @@ public class Enemy : MonoBehaviour
 
         ChanceForShield();
 
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
+        }
     }
     void Update()
     {
-
         EnemyRamPlayerDetect();
         if (_canRamPlayer == true)
         {
@@ -129,7 +139,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator StopEnemyRam()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         _canRamPlayer = false;
     }
 
@@ -139,12 +149,12 @@ public class Enemy : MonoBehaviour
 
         if (transform.position.y <= -7)
         {
-            float randomX = Random.Range(-7.25f, 7.25f);    
+            float randomX = Random.Range(-5.4f, 5.4f);    
 
-            transform.position = new Vector3(randomX, 7.5f, 0);
+            transform.position = new Vector3(randomX, 7f, 0);
         }
 
-        if (transform.position.x >= 7f)
+        if (transform.position.x >= 5.4f)
         {
             _moveLeft = true;
         }
@@ -152,7 +162,7 @@ public class Enemy : MonoBehaviour
         {
             transform.Translate(Vector3.left * _sideMovementSpeed * Time.deltaTime);
         }
-        if (transform.position.x <= -7f)
+        if (transform.position.x <= -5.4f)
         {
             _moveLeft = false;
         }
@@ -178,19 +188,10 @@ public class Enemy : MonoBehaviour
 
     private void EnemyFireLaser()
     {
-        if (_detectedTarget == true && _canFireLaser == true)
+        if (_detectedTarget == true && _canFireLaser == true && _isDead == false)
         {
             StartCoroutine(EnemyFireLaserRoutine());
         }
-
-        // if (Time.time > _canFire && _detectedTarget == true)
-        // {
-        //  _fireRate = Random.Range(3f, 7f);
-        //  _canFire = Time.time + _fireRate;
-        //  Instantiate(_enemyLaserPrefab, (transform.position + _laserOffset), Quaternion.identity);
-        //   _detectedTarget = false;
-        //  }
-
     }
 
     IEnumerator EnemyFireLaserRoutine()
@@ -206,6 +207,7 @@ public class Enemy : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             _playerScript.Damage();
             _animator.SetTrigger("OnEnemyDeath");
@@ -227,6 +229,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
+                _isDead = true;
                 _animator.SetTrigger("OnEnemyDeath");
                 _audioSource.Play();
                 _enemySpeed = 0;
@@ -241,6 +244,7 @@ public class Enemy : MonoBehaviour
 
         if(other.CompareTag("Explosion"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
@@ -254,6 +258,7 @@ public class Enemy : MonoBehaviour
 
         if(other.CompareTag("Bomb"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();

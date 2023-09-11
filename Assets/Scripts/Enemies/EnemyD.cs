@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyD : MonoBehaviour
 {
     [SerializeField]
-    private float _enemySpeed = 4f;
+    private float _enemySpeed = 3f;
     [SerializeField]
     private GameObject _enemySpreadLaserPrefab;
     [SerializeField]
@@ -23,14 +23,16 @@ public class EnemyD : MonoBehaviour
     private bool _detectedTarget = false;
     private bool _canFireLaser = true;
 
-    private bool _moveLeft = false;
+    private bool _moveLeft;
     private bool _moveUp = false;
     private bool _isDodgingLaser = false;
     private bool _canDodgeLaser = true;
     [SerializeField]
-    private float _dodgeMovementSpeed = 8f;
+    private float _dodgeMovementSpeed = 6f;
     [SerializeField]
     private GameObject _thrusterVisual;
+
+    private bool _isDead = false;
 
     private void Start()
     {
@@ -71,6 +73,15 @@ public class EnemyD : MonoBehaviour
 
         ChanceForShield();
 
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
+        }
     }
     void Update()
     {
@@ -129,7 +140,7 @@ public class EnemyD : MonoBehaviour
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
         }
         //horizontal movement
-        if (transform.position.x >= 7f)
+        if (transform.position.x >= 5.3f)
         {
             _moveLeft = true;
         }
@@ -137,7 +148,7 @@ public class EnemyD : MonoBehaviour
         {
             transform.Translate(Vector3.left * _enemySpeed * Time.deltaTime);
         }
-        if (transform.position.x <= -7f)
+        if (transform.position.x <= -5.3f)
         {
             _moveLeft = false;
         }
@@ -184,7 +195,7 @@ public class EnemyD : MonoBehaviour
 
     private void EnemyFireLaser()
     {
-        if (_detectedTarget == true && _canFireLaser == true)
+        if (_detectedTarget == true && _canFireLaser == true && _isDead == false)
         {
             StartCoroutine(EnemyFireLaserRoutine());
         }
@@ -203,6 +214,7 @@ public class EnemyD : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             _playerScript.Damage();
             _animator.SetTrigger("OnEnemyDeath");
@@ -224,6 +236,7 @@ public class EnemyD : MonoBehaviour
             }
             else
             {
+                _isDead = true;
                 _animator.SetTrigger("OnEnemyDeath");
                 _audioSource.Play();
                 _enemySpeed = 0;
@@ -238,6 +251,7 @@ public class EnemyD : MonoBehaviour
 
         if (other.CompareTag("Explosion"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
@@ -251,6 +265,7 @@ public class EnemyD : MonoBehaviour
 
         if (other.CompareTag("Bomb"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();

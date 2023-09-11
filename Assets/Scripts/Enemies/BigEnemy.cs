@@ -9,27 +9,50 @@ public class BigEnemy : MonoBehaviour
     [SerializeField]
     private float _descentSpeed = 2f;
     [SerializeField]
-    private bool _moveLeft = false;
+    private bool _moveLeft;
     [SerializeField]
     private GameObject _explosionPrefab;
     private SpawnManager _spawnManager;
 
+    [SerializeField]
+    private GameObject _ammoPowerup;
+
 
     void Start()
     {
-        _moveLeft = true;
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
+        }
+        
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
         if (_spawnManager == null)
         {
             Debug.Log("SpawnManager is null");
         }
+
+        StartCoroutine(SpawnAmmoPowerup());
     }
 
     // Update is called once per frame
     void Update()
     {
         BigEnemyMovement();
+    }
+
+    IEnumerator SpawnAmmoPowerup()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5f);
+            Instantiate(_ammoPowerup, transform.position, Quaternion.identity);
+        }
     }
 
     private void BigEnemyMovement() //moves enemy left and right
@@ -64,6 +87,7 @@ public class BigEnemy : MonoBehaviour
         if(collision.CompareTag("Laser"))
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            Instantiate(_ammoPowerup, transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
             _spawnManager.StartSpawning();
             Destroy(this.gameObject);
@@ -73,7 +97,7 @@ public class BigEnemy : MonoBehaviour
             Player _playerScript = collision.GetComponent<Player>();
 
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-            Destroy(collision.gameObject);
+            Instantiate(_ammoPowerup, transform.position, Quaternion.identity);
             _spawnManager.StartSpawning();
             _playerScript.Damage();
             Destroy(this.gameObject);
@@ -82,6 +106,7 @@ public class BigEnemy : MonoBehaviour
         if (collision.CompareTag("Bomb"))
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            Instantiate(_ammoPowerup, transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
             _spawnManager.StartSpawning();
             Destroy(this.gameObject);

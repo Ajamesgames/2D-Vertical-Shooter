@@ -7,7 +7,7 @@ public class EnemyC : MonoBehaviour
     //this object is rotated 180* on Z axis
 
     [SerializeField]
-    private float _enemySpeed = 4f;
+    private float _enemySpeed = 6f;
     [SerializeField]
     private GameObject _explosionPrefab;
     [SerializeField]
@@ -28,6 +28,8 @@ public class EnemyC : MonoBehaviour
     private bool _hasUsedLaserbeam = false;
     [SerializeField]
     private AudioClip _laserbeamClip;
+
+    private bool _isDead = false;
 
 
 
@@ -65,6 +67,8 @@ public class EnemyC : MonoBehaviour
 
         ChanceForShield();
 
+        transform.Rotate(0, 0, 180);
+
     }
     void Update()
     {
@@ -92,27 +96,27 @@ public class EnemyC : MonoBehaviour
             transform.Translate(Vector3.up * _enemySpeed * Time.deltaTime);
         }
 
-        if (transform.position.y <= _playerPos.y - 2 && _hasUsedLaserbeam == false)
+        if (transform.position.y <= _playerPos.y - 2 && _hasUsedLaserbeam == false && _isDead == false)
         {
             StartCoroutine(LaserbeamAttack());
         }
 
         if (transform.position.x < _playerPos.x && _firingLaserbeam == true)
         {
-            transform.Translate(Vector3.left * _enemySpeed * Time.deltaTime);
+            transform.Translate(Vector3.left * (_enemySpeed /2) * Time.deltaTime);
         }
         if (transform.position.x > _playerPos.x && _firingLaserbeam == true)
         {
-            transform.Translate(Vector3.right * _enemySpeed * Time.deltaTime);
+            transform.Translate(Vector3.right * (_enemySpeed /2) * Time.deltaTime);
         }
 
 
 
         if (transform.position.y <= -9)
         {
-            float randomX = Random.Range(-7.25f, 7.25f);
+            float randomX = Random.Range(-5.3f, 5.3f);
 
-            transform.position = new Vector3(randomX, 7.5f, 0);
+            transform.position = new Vector3(randomX, 7f, 0);
 
             _hasUsedLaserbeam = false;
         }
@@ -126,7 +130,7 @@ public class EnemyC : MonoBehaviour
         _hasUsedLaserbeam = true;
         _laserBeam.SetActive(true);
         _audioSource.Play();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(Random.Range(1f,1.5f));
         _firingLaserbeam = false;
         _laserBeam.SetActive(false);
 
@@ -142,14 +146,15 @@ public class EnemyC : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _isDead = true;
             _audioSource.clip = _explosionClip;
             _shieldVisual.SetActive(false);
             _playerScript.Damage();
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;
-            _spawnManager.EnemiesRemainingTracker(1);
             Destroy(GetComponent<Collider2D>());
+            _spawnManager.EnemiesRemainingTracker(1);
             Destroy(this.gameObject, 0.75f);
         }
 
@@ -163,6 +168,7 @@ public class EnemyC : MonoBehaviour
             }
             else
             {
+                _isDead = true;
                 _audioSource.clip = _explosionClip;
                 _animator.SetTrigger("OnEnemyDeath");
                 _audioSource.Play();
@@ -177,6 +183,7 @@ public class EnemyC : MonoBehaviour
 
         if (other.CompareTag("Explosion"))
         {
+            _isDead = true;
             _audioSource.clip = _explosionClip;
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
@@ -190,6 +197,7 @@ public class EnemyC : MonoBehaviour
 
         if (other.CompareTag("Bomb"))
         {
+            _isDead = true;
             _audioSource.clip = _explosionClip;
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");

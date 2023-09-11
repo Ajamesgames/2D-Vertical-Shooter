@@ -28,6 +28,8 @@ public class EnemyB : MonoBehaviour
     private GameObject _shieldVisual;
     private bool _isShieldActive = false;
 
+    private bool _isDead = false;
+
     private void Start()
     {
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -62,12 +64,22 @@ public class EnemyB : MonoBehaviour
         StartCoroutine(SnakeMovement());
 
         ChanceForShield();
+
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
+        }
     }
 
     void Update()
     {
         EnemyMovement();
-        if (_playerScript != null)
+        if (_playerScript != null && _isDead == false)
         {
             EnemyFireLaser();
         }
@@ -90,7 +102,7 @@ public class EnemyB : MonoBehaviour
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
         }
 
-        if (transform.position.x >= 7f)
+        if (transform.position.x >= 5.3f)
         {
             _moveLeft = true;
         }
@@ -98,7 +110,7 @@ public class EnemyB : MonoBehaviour
         {
             transform.Translate(Vector3.left * _enemySpeed * Time.deltaTime);
         }
-        if (transform.position.x <= -7f)
+        if (transform.position.x <= -5.3f)
         {
             _moveLeft = false;
         }
@@ -109,9 +121,9 @@ public class EnemyB : MonoBehaviour
 
         if (transform.position.y <= -7)
         {
-            float randomX = Random.Range(-7.25f, 7.25f);
+            float randomX = Random.Range(-5.3f, 5.3f);
 
-            transform.position = new Vector3(randomX, 7.5f, 0);
+            transform.position = new Vector3(randomX, 7f, 0);
             StartCoroutine(SnakeMovement());
         }
 
@@ -157,6 +169,7 @@ public class EnemyB : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             transform.localScale = new Vector3(1f, 1f, 0);
             _playerScript.Damage();
@@ -178,6 +191,7 @@ public class EnemyB : MonoBehaviour
             }
             else
             {
+                _isDead = true;
                 transform.localScale = new Vector3(1f, 1f, 0);
                 _animator.SetTrigger("OnEnemyDeath");
                 _audioSource.Play();
@@ -192,6 +206,7 @@ public class EnemyB : MonoBehaviour
 
         if (other.CompareTag("Explosion"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             transform.localScale = new Vector3(1f, 1f, 0);
             _animator.SetTrigger("OnEnemyDeath");
@@ -205,6 +220,7 @@ public class EnemyB : MonoBehaviour
 
         if (other.CompareTag("Bomb"))
         {
+            _isDead = true;
             _shieldVisual.SetActive(false);
             transform.localScale = new Vector3(1f, 1f, 0);
             _animator.SetTrigger("OnEnemyDeath");

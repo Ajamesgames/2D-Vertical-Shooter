@@ -5,7 +5,7 @@ using UnityEngine;
 public class Boss : MonoBehaviour
 {
     private float _enemySpeed = 4f;
-    private bool _moveLeft = false;
+    private bool _moveLeft;
     private bool _fightStarted = false;
     private BoxCollider2D _bossCollider;
     [SerializeField]
@@ -18,8 +18,7 @@ public class Boss : MonoBehaviour
     private bool _startBossAttacks = false;
     private GameObject _player;
     private UIManager _uiManagerScript;
-    [SerializeField]
-    private GameObject _bossHealthUI;
+    private SpawnManager _spawnManager;
 
     void Start()
     {
@@ -27,8 +26,12 @@ public class Boss : MonoBehaviour
         _animator = gameObject.transform.GetComponent<Animator>();
         _player = GameObject.Find("Player");
         _uiManagerScript = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
-
+        if (_spawnManager == null)
+        {
+            Debug.Log("Spawn Manager is null");
+        }
         if (_animator == null)
         {
             Debug.LogError("animator is null");
@@ -43,6 +46,16 @@ public class Boss : MonoBehaviour
         }
 
         StartCoroutine(StartBossFight());
+
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
+        }
     }
 
     void Update()
@@ -58,7 +71,7 @@ public class Boss : MonoBehaviour
     IEnumerator StartBossFight()
     {
         yield return new WaitForSeconds(4f);
-        _bossHealthUI.SetActive(true);
+        _uiManagerScript.BossHealthAppear();
         _startBossAttacks = true;
         _fightStarted = true;
     }
@@ -134,9 +147,10 @@ public class Boss : MonoBehaviour
         if (_lifeTotal == 0)
         {
             _fightStarted = false;
-            _bossHealthUI.SetActive(false);
+            _uiManagerScript.BossHealthDisappear();
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             _uiManagerScript.YouWinScreen();
+            _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
     }

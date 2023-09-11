@@ -9,8 +9,6 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _scoreText;
     [SerializeField]
-    private TMP_Text _ammoText;
-    [SerializeField]
     private TMP_Text _gameoverText;
     [SerializeField]
     private TMP_Text _restartText;
@@ -28,6 +26,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _youWinText;
 
+    [SerializeField]
+    private Slider _ammoSlider;
+
 
     void Start()
     {
@@ -40,7 +41,6 @@ public class UIManager : MonoBehaviour
         _youWinText.gameObject.SetActive(false);
 
         _scoreText.text = "Score: 0";
-        _ammoText.text = "Ammo: 30/30";
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
@@ -84,12 +84,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateAmmo(int ammoCount, int maxAmmo)
+    public void UpdateAmmo(int ammoCount)
     {
-        _ammoText.text = "Ammo: " + ammoCount + "/" + maxAmmo;
+        _ammoSlider.value = ammoCount;
     }
 
-    void GameOverSequence()
+    private void GameOverSequence()
     {
         _livesImg[0].gameObject.SetActive(false);
         StartCoroutine(GameOverFlicker());
@@ -129,6 +129,16 @@ public class UIManager : MonoBehaviour
     public void BossHealthSliderUpdate(int bossHealth)
     {
         _bossHealthSlider.value = bossHealth;
+    }
+
+    public void BossHealthAppear()
+    {
+        _bossHealthSlider.gameObject.SetActive(true);
+    }
+
+    public void BossHealthDisappear()
+    {
+        _bossHealthSlider.gameObject.SetActive(false);
     }
 
     public void YouWinScreen()

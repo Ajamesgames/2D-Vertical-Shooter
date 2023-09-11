@@ -33,7 +33,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
-        if (_enemiesRemaining == 0 && _isLevelEnding == true)
+        if (_enemiesRemaining <= 0 && _isLevelEnding == true)
         {
             NewLevelStart();
             StopAllCoroutines();
@@ -41,7 +41,7 @@ public class SpawnManager : MonoBehaviour
     }
     private void NewLevelStart()
     {
-        Instantiate(_enemyPrefabs[0], new Vector3(0, 8, 0), Quaternion.identity);
+        Instantiate(_enemyPrefabs[0], new Vector3(0, 7, 0), Quaternion.identity);
         _isLevelEnding = false;
     }
 
@@ -68,16 +68,16 @@ public class SpawnManager : MonoBehaviour
 
         while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel == 1)
         {
-            Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
+            Vector3 _randomSpawnPos = new Vector3(Random.Range(-5.3f, 5.3f), 7f, 0);
             GameObject newEnemy = Instantiate(_enemyPrefabs[1], _randomSpawnPos, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             _enemiesToSpawn--;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
         }
 
         while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel == 2)
         {
-            Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
+            Vector3 _randomSpawnPos = new Vector3(Random.Range(-5.3f, 5.3f), 7f, 0);
             int enemyProbability = Random.Range(1, 101);
             if (enemyProbability > 50) // if 51-100 spawn enemy 1, 50% chance
             {
@@ -92,27 +92,27 @@ public class SpawnManager : MonoBehaviour
                 _enemiesToSpawn--;
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
         }
 
         while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel == 3)
         {
-            Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
+            Vector3 _randomSpawnPos = new Vector3(Random.Range(-5.3f, 5.3f), 7f, 0);
             int enemyProbability = Random.Range(1, 4);
             GameObject newEnemy = Instantiate(_enemyPrefabs[enemyProbability], _randomSpawnPos, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             _enemiesToSpawn--;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
         }
 
         while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel == 4)
         {
-            Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
+            Vector3 _randomSpawnPos = new Vector3(Random.Range(-5.3f, 5.3f), 7f, 0);
             int enemyProbability = Random.Range(1, 5);
             GameObject newEnemy = Instantiate(_enemyPrefabs[enemyProbability], _randomSpawnPos, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             _enemiesToSpawn--;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
         }
 
         while (_stopSpawning == false && _enemiesToSpawn > 0 && _currentLevel == 5)
@@ -120,7 +120,7 @@ public class SpawnManager : MonoBehaviour
             _enemiesToSpawn = 1;
             Instantiate(_enemyPrefabs[5], new Vector3(0, 10, 0), Quaternion.identity);
             _enemiesToSpawn--;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
         }
 
         _isLevelEnding = true;
@@ -132,7 +132,7 @@ public class SpawnManager : MonoBehaviour
 
         while (_stopSpawning == false)
         {
-            Vector3 _randomSpawnPos = new Vector3(Random.Range(-7.25f, 7.25f), 7.25f, 0);
+            Vector3 _randomSpawnPos = new Vector3(Random.Range(-5.3f, 5.3f), 7f, 0);
             int powerupProbability = Random.Range(1, 101);
             if (powerupProbability > 80) //ammo powerup, 20% chance
             {
@@ -163,8 +163,7 @@ public class SpawnManager : MonoBehaviour
                 Instantiate(_powerups[6], _randomSpawnPos, Quaternion.identity);
             }
 
-
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(3f);
         }
     }
 

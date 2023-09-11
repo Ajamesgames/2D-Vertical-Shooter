@@ -305,14 +305,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a428dc882c356c94ebed2bf8bd4bd934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemySpeed: 4
+  _enemySpeed: 3
   _enemySpreadLaserPrefab: {fileID: 833142302814649547, guid: d5b43f73d0b1a90469ee45391a2fa65e,
     type: 3}
   _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
     type: 3}
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _shieldVisual: {fileID: 71258519738876621}
-  _dodgeMovementSpeed: 8
+  _dodgeMovementSpeed: 6
   _thrusterVisual: {fileID: 71258520894659615}
 --- !u!61 &2505384670943772378
 BoxCollider2D:
