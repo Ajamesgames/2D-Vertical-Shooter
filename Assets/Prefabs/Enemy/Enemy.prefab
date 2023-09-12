@@ -152,12 +152,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemySpeed: 2.5
+  _sideMovementSpeed: 8
   _enemyLaserPrefab: {fileID: 8312650121625668393, guid: 9af11b422aa7a894f9a27a4c1ad1130c,
     type: 3}
   _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
     type: 3}
   _explosionClip: {fileID: 8300000, guid: fc8608dd873bdda46bcc002a9df95088, type: 3}
-  _sideMovementSpeed: 8
 --- !u!61 &4392759673163770662
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -268,7 +268,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.75
   m_Pitch: 1
   Loop: 0
   Mute: 0

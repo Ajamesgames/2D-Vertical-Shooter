@@ -249,8 +249,8 @@ MonoBehaviour:
   _laserbeam: {fileID: 94248087345199023}
   _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
     type: 3}
-  _explosionClip: {fileID: 8300000, guid: fc8608dd873bdda46bcc002a9df95088, type: 3}
   _laserbeamClip: {fileID: 8300000, guid: 4f8d28937409e8b44a33810d588f9e87, type: 3}
+  _explosionClip: {fileID: 8300000, guid: fc8608dd873bdda46bcc002a9df95088, type: 3}
 --- !u!212 &581873841645432270
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -361,7 +361,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.75
   m_Pitch: 1
   Loop: 0
   Mute: 0

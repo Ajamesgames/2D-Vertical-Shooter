@@ -593,15 +593,15 @@ MonoBehaviour:
   _scoreText: {fileID: 1799075538}
   _gameoverText: {fileID: 206485932}
   _restartText: {fileID: 1131697089}
+  _levelText: {fileID: 1235799601}
+  _youWinText: {fileID: 1503937919}
   _livesImg:
   - {fileID: 1242013907}
   - {fileID: 357959205}
   - {fileID: 1731690614}
-  _thrusterSlider: {fileID: 248168731}
-  _levelText: {fileID: 1235799601}
   _bossHealthSlider: {fileID: 1106879389}
-  _youWinText: {fileID: 1503937919}
   _ammoSlider: {fileID: 421090785}
+  _thrusterSlider: {fileID: 248168731}
 --- !u!1 &248168729
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,24 +1189,24 @@ MonoBehaviour:
   _isTripleShotActive: 0
   _isDoubleShotActive: 0
   _isBombActive: 0
+  _isHomingLaserActive: 0
   _laserPrefab: {fileID: 4545298769442348693, guid: d91208e70b85eff4fade9d114700d1d8,
     type: 3}
   _doubleShotPrefab: {fileID: 9036411708261386493, guid: dd72c0a6d3a63894c9343637b753e253,
     type: 3}
   _tripleShotPrefab: {fileID: 4143519566280444681, guid: 471e8c454257c3c4eb0a5d2755ec24d1,
     type: 3}
+  _homingLaserPrefab: {fileID: 5741113970115481820, guid: bbf46b7630988004f8e9240ae819ad1b,
+    type: 3}
+  _bombPrefab: {fileID: 8933084920721023820, guid: a5d41121993899b40aa802a20124fc96,
+    type: 3}
   _shieldVisual: {fileID: 2125244464}
   _rightEngine: {fileID: 1225612660}
   _leftEngine: {fileID: 282579635}
   _thruster: {fileID: 367024332}
-  _bombPrefab: {fileID: 8933084920721023820, guid: a5d41121993899b40aa802a20124fc96,
-    type: 3}
   _mainCamera: {fileID: 2109287790}
   _laserSoundClip: {fileID: 8300000, guid: 8d3533324c49f254fa6d647815d4ab73, type: 3}
   _outOfAmmoClip: {fileID: 8300000, guid: 26063c41085f295448225110d63d3b81, type: 3}
-  _homingLaserPrefab: {fileID: 5741113970115481820, guid: bbf46b7630988004f8e9240ae819ad1b,
-    type: 3}
-  _isHomingLaserActive: 0
   _damagedClip: {fileID: 8300000, guid: fc8608dd873bdda46bcc002a9df95088, type: 3}
 --- !u!212 &482002672
 SpriteRenderer:
@@ -1334,7 +1334,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1462,7 +1462,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e20c4c056c1aac542a7aebfe98858c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _backgroundSpeed: 2
 --- !u!212 &490104584
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1873,6 +1872,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c17b86856ac68384eaf8666bf1f1c2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentLevel: 0
+  _enemiesToSpawn: 0
+  _enemiesRemaining: 0
   _enemyPrefabs:
   - {fileID: 637157539356987022, guid: 7fbeb706629b87d4a83b153630854d00, type: 3}
   - {fileID: 8928828296152145538, guid: a0c070271e64c94428e970e32162ac07, type: 3}
@@ -1889,9 +1891,6 @@ MonoBehaviour:
   - {fileID: 5132387158690479451, guid: a6c17c48d1e08ce46aa3947d827d81ea, type: 3}
   - {fileID: 4131007755187218318, guid: e874d86b40abd5b4bb497b77a224ae54, type: 3}
   - {fileID: 9219352750854417050, guid: d372e4dc78f3d46438fdb9a284c18372, type: 3}
-  _currentLevel: 0
-  _enemiesToSpawn: 0
-  _enemiesRemaining: 0
 --- !u!4 &1073695410
 Transform:
   m_ObjectHideFlags: 0
