@@ -1,33 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
+
 
 public class SpawnManager : MonoBehaviour
 {
+    [SerializeField]
+    private int _currentLevel = 0;
+    [SerializeField]
+    private int _enemiesToSpawn;
+    [SerializeField]
+    private int _enemiesRemaining;
+    private bool _stopSpawning = false;
+    private bool _isLevelEnding = true;
     [SerializeField]
     private GameObject[] _enemyPrefabs; //0 = wave start enemy, 1 = 1st enemy, 2 = Enemy B, 3 = enemy C, 4 = enemy D, 5 = boss.
     [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
     private GameObject[] _powerups; //0 = ammo, 1 = attack, 2 = defense, 3 = life, 4 = Slow down, 5 = bomb, 6 = homing.
-    private bool _stopSpawning = false;
-
     private UIManager _uiManager;
-
-    private int _currentLevel = 0;
-    [SerializeField]
-    private int _enemiesToSpawn;
-    [SerializeField]
-    private int _enemiesRemaining;
-    private bool _isLevelEnding = true;
+    private PostProcessVolume _postProcessEffects;
+    private ColorGrading _colorGrading;
 
     private void Start()
     {
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _postProcessEffects = GameObject.Find("Post Process Volume").GetComponent<PostProcessVolume>();
 
         if (_uiManager == null)
         {
             Debug.Log("UIManager is Null");
+        }
+        if (_postProcessEffects == null)
+        {
+            Debug.Log("post process effects is Null");
         }
     }
 
@@ -54,6 +62,7 @@ public class SpawnManager : MonoBehaviour
     {
         StartCoroutine(SpawnRoutine());
         StartCoroutine(SpawnPowerupRoutine());
+        PostProcessEffectChanges();
     }
 
     IEnumerator SpawnRoutine() //0 = wave start enemy, 1 = enemy 1, 2 = Enemy 2, 3 = enemy 3, 4 = enemy 4, 5 = boss
@@ -163,7 +172,31 @@ public class SpawnManager : MonoBehaviour
                 Instantiate(_powerups[6], _randomSpawnPos, Quaternion.identity);
             }
 
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(4f);
+        }
+    }
+
+    private void PostProcessEffectChanges()
+    {
+        if (_currentLevel == 2)
+        {
+            _postProcessEffects.profile.TryGetSettings(out _colorGrading);
+            _colorGrading.temperature.value = -40;
+        }
+        if (_currentLevel == 3)
+        {
+            _postProcessEffects.profile.TryGetSettings(out _colorGrading);
+            _colorGrading.temperature.value = 0;
+        }
+        if (_currentLevel == 4)
+        {
+            _postProcessEffects.profile.TryGetSettings(out _colorGrading);
+            _colorGrading.temperature.value = 50;
+        }
+        if (_currentLevel == 5)
+        {
+            _postProcessEffects.profile.TryGetSettings(out _colorGrading);
+            _colorGrading.temperature.value = 100;
         }
     }
 
@@ -171,10 +204,6 @@ public class SpawnManager : MonoBehaviour
     {
         _stopSpawning = true;
     }
-
-
-
-
 }
 
 

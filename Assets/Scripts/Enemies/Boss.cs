@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
+    [SerializeField]
+    private int _lifeTotal = 30;
     private float _enemySpeed = 4f;
     private bool _moveLeft;
     private bool _fightStarted = false;
+    private bool _musicFadeOut = false;
+    private bool _startBossAttacks = false;
     private BoxCollider2D _bossCollider;
     [SerializeField]
-    private int _lifeTotal = 25;
-    [SerializeField]
     private GameObject _explosionPrefab;
-    private Animator _animator;
     [SerializeField]
     private GameObject[] _bossAttacks; //0 = spread shot, 1 = homing shot, 2 = laser attack
-    private bool _startBossAttacks = false;
     private GameObject _player;
+    private Animator _animator;
     private UIManager _uiManagerScript;
     private SpawnManager _spawnManager;
+    private AudioSource _gameMusic;
+    [SerializeField]
+    private AudioClip _bossMusic;
+    [SerializeField]
+    private AudioClip _victoryMusic;
 
     void Start()
     {
@@ -27,10 +33,11 @@ public class Boss : MonoBehaviour
         _player = GameObject.Find("Player");
         _uiManagerScript = GameObject.Find("Canvas").GetComponent<UIManager>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _gameMusic = GameObject.Find("Background_music").GetComponent<AudioSource>();
 
-        if (_spawnManager == null)
+        if (_bossCollider == null)
         {
-            Debug.Log("Spawn Manager is null");
+            Debug.Log("Box collider is null");
         }
         if (_animator == null)
         {
@@ -44,9 +51,46 @@ public class Boss : MonoBehaviour
         {
             Debug.Log("Ui manager is null");
         }
+        if (_spawnManager == null)
+        {
+            Debug.Log("Spawn Manager is null");
+        }
+        if (_gameMusic == null)
+        {
+            Debug.Log("Game music is null");
+        }
 
         StartCoroutine(StartBossFight());
 
+        RandomStartDirection();
+
+        _musicFadeOut = true;
+    }
+
+    void Update()
+    {
+        FadeOutMusic();
+        _uiManagerScript.BossHealthSliderUpdate(_lifeTotal);
+        EnemyMovement();
+        if (_startBossAttacks == true && _fightStarted == true)
+        {
+            StartCoroutine(BossAttackRoutine());
+        }
+
+    }
+    IEnumerator StartBossFight()
+    {
+        yield return new WaitForSeconds(4.5f);
+        _uiManagerScript.BossHealthAppear();
+        _startBossAttacks = true;
+        _fightStarted = true;
+        _gameMusic.volume = 0.6f;
+        _gameMusic.clip = _bossMusic;
+        _gameMusic.Play();
+    }
+
+    private void RandomStartDirection()
+    {
         int randomDirection = Random.Range(0, 2);
         if (randomDirection == 0)
         {
@@ -58,22 +102,20 @@ public class Boss : MonoBehaviour
         }
     }
 
-    void Update()
+    private void FadeOutMusic()
     {
-        _uiManagerScript.BossHealthSliderUpdate(_lifeTotal);
-        EnemyMovement();
-        if (_startBossAttacks == true && _fightStarted == true)
+        if (_musicFadeOut == true)
         {
-            StartCoroutine(BossAttackRoutine());
+            if (_gameMusic.volume <= 0.01f)
+            {
+                _gameMusic.Stop();
+                _musicFadeOut = false;
+            }
+            else
+            {
+                _gameMusic.volume += - (0.3f * Time.deltaTime);
+            }
         }
-
-    }
-    IEnumerator StartBossFight()
-    {
-        yield return new WaitForSeconds(4f);
-        _uiManagerScript.BossHealthAppear();
-        _startBossAttacks = true;
-        _fightStarted = true;
     }
 
     private void EnemyMovement()
@@ -107,7 +149,7 @@ public class Boss : MonoBehaviour
     IEnumerator BossAttackRoutine()
     {
         _startBossAttacks = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
 
         while (_fightStarted == true && _player != null)
         {
@@ -135,7 +177,7 @@ public class Boss : MonoBehaviour
                 Vector3 _laserOffset = new Vector3(0, -3, 0);
                 Instantiate(_bossAttacks[_randomAttack], transform.position + _laserOffset, Quaternion.identity);
             }
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1.5f);
         }
     }
 
@@ -146,6 +188,9 @@ public class Boss : MonoBehaviour
 
         if (_lifeTotal == 0)
         {
+            _gameMusic.Stop();
+            _gameMusic.clip = _victoryMusic;
+            _gameMusic.Play();
             _fightStarted = false;
             _uiManagerScript.BossHealthDisappear();
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
@@ -155,16 +200,15 @@ public class Boss : MonoBehaviour
         }
     }
 
-
-
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             Player _playerScript = other.GetComponent<Player>();
-
-            _playerScript.Damage();
+            if( _playerScript != null)
+            {
+                _playerScript.Damage();
+            }
         }
 
         if (other.CompareTag("Laser"))

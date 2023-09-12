@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     private int _shieldStrength = 3;
     [SerializeField]
     private int _ammoCount;
+    private int _maxAmmoCount;
     [SerializeField]
     private bool _isShieldActive = false;
     [SerializeField]
@@ -33,6 +34,9 @@ public class Player : MonoBehaviour
     private bool _isDoubleShotActive = false;
     [SerializeField]
     private bool _isBombActive = false;
+    [SerializeField]
+    private bool _isHomingLaserActive = false;
+    private bool _isSlowDownActive = false;
     private bool _isThrusterCalled = false;
     private bool _isCameraShaking = false;
     private Vector3 _laserOffSet = new Vector3(0, 1.15f, 0);
@@ -44,6 +48,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
+    private GameObject _homingLaserPrefab;
+    [SerializeField]
+    private GameObject _bombPrefab;
+    [SerializeField]
     private GameObject _shieldVisual;
     [SerializeField]
     private GameObject _rightEngine;
@@ -52,27 +60,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _thruster;
     [SerializeField]
-    private GameObject _bombPrefab;
-    [SerializeField]
     private GameObject _mainCamera;
     [SerializeField]
     private AudioClip _laserSoundClip;
     [SerializeField]
     private AudioClip _outOfAmmoClip;
+    [SerializeField]
+    private AudioClip _damagedClip;
     private AudioSource _audioSource;
     private UIManager _uiManager;
     private SpawnManager _spawnManager;
-
-    private int _maxAmmoCount;
-
-    private bool _isSlowDownActive = false;
-
-    [SerializeField]
-    private GameObject _homingLaserPrefab;
-    [SerializeField]
-    private bool _isHomingLaserActive = false;
-
-
 
     void Start()
     {
@@ -82,16 +79,11 @@ public class Player : MonoBehaviour
         _thrusterFuel = 100;
         _score = 0;
         transform.position = new Vector3(0, -2f, 0);
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
-        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _rightEngine.gameObject.SetActive(false);
         _leftEngine.gameObject.SetActive(false);
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
-
-        if (_audioSource == null)
-        {
-            Debug.Log("Audiosource is null");
-        }
 
         if (_spawnManager == null)
         {
@@ -101,7 +93,10 @@ public class Player : MonoBehaviour
         {
             Debug.Log("UIManager is null");
         }
-
+        if (_audioSource == null)
+        {
+            Debug.Log("Audiosource is null");
+        }
     }
 
     void Update()
@@ -131,7 +126,6 @@ public class Player : MonoBehaviour
         }
 
         VacuumPowerups();
-
     }
 
     void CalculateMovement()
@@ -165,7 +159,6 @@ public class Player : MonoBehaviour
         }
 
         transform.Translate(direction * Time.deltaTime * _playerSpeed);
-
 
         if (transform.position.y > 4.5f)
         {
@@ -216,7 +209,6 @@ public class Player : MonoBehaviour
     {
         _canFire = Time.time + _fireRate;
 
-
         if (_isBombActive == true)
         {
             Instantiate(_bombPrefab, (transform.position + _laserOffSet), Quaternion.identity);
@@ -242,7 +234,6 @@ public class Player : MonoBehaviour
         _uiManager.UpdateAmmo(_ammoCount);
         _audioSource.clip = _laserSoundClip;
         _audioSource.Play();
-
     }
 
     IEnumerator CameraShakeRoutine()
@@ -251,6 +242,28 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         _mainCamera.transform.position = _camOriginPos;
         _isCameraShaking = false;
+    }
+
+    private void VacuumPowerups()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            GameObject[] _powerupsLocated = GameObject.FindGameObjectsWithTag("Powerup");
+            foreach (GameObject _powerup in _powerupsLocated)
+            {
+                Powerup _powerupScript = _powerup.GetComponent<Powerup>();
+                _powerupScript.GoToPlayerPosition();
+            }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy Laser"))
+        {
+            Damage();
+            Destroy(collision.gameObject);
+        }
     }
 
     public void Damage()
@@ -264,6 +277,8 @@ public class Player : MonoBehaviour
         else if (_isShieldActive == false)
         {
             _lives -= 1;
+            _audioSource.clip = _damagedClip;
+            _audioSource.Play();
         }
 
         if (_shieldStrength == 2)
@@ -281,7 +296,6 @@ public class Player : MonoBehaviour
             _shieldVisual.SetActive(false);
         }
 
-
         if (_lives == 2)
         {
             _rightEngine.gameObject.SetActive(true);
@@ -295,22 +309,24 @@ public class Player : MonoBehaviour
 
         if (_lives == 0)
         {
-            _spawnManager.OnPlayerDeath(); //tells spawnmanager to stop spawning
+            _spawnManager.OnPlayerDeath();
 
             Destroy(this.gameObject);
         }
 
         _isCameraShaking = true;
-
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void AddScore(int points)
     {
-        if (collision.CompareTag("Enemy Laser"))
-        {
-            Damage();
-            Destroy(collision.gameObject);
-        }
+        _score += points;
+        _uiManager.UpdateScore(_score);
+    }
+
+    public void AmmoPowerupActivate()
+    {
+        _ammoCount = _maxAmmoCount;
+        _uiManager.UpdateAmmo(_ammoCount);
     }
 
     public void ShieldActivate()
@@ -348,7 +364,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     public void LaserPowerupActive()
     {
         if (_isDoubleShotActive == false)
@@ -374,20 +389,8 @@ public class Player : MonoBehaviour
     }
     IEnumerator BombPowerDownRoutine()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         _isBombActive = false;
-    }
-
-    public void AddScore(int points)
-    {
-        _score += points;
-        _uiManager.UpdateScore(_score);
-    }
-
-    public void AmmoPowerupActivate()
-    {
-        _ammoCount = _maxAmmoCount;
-        _uiManager.UpdateAmmo(_ammoCount);
     }
 
     public void SlowDownPowerupActive()
@@ -395,24 +398,10 @@ public class Player : MonoBehaviour
         _isSlowDownActive = true;
         StartCoroutine(SlowDownTurnOffRoutine());
     }
-
     IEnumerator SlowDownTurnOffRoutine()
     {
         yield return new WaitForSeconds(5f);
         _isSlowDownActive = false;
-    }
-
-    private void VacuumPowerups()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            GameObject[] _powerupsLocated = GameObject.FindGameObjectsWithTag("Powerup");
-            foreach (GameObject _powerup in _powerupsLocated)
-            {
-                Powerup _powerupScript = _powerup.GetComponent<Powerup>();
-                _powerupScript.GoToPlayerPosition();
-            }
-        }
     }
 
     public void HomingLaserPowerupActive()
@@ -425,6 +414,5 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5f);
         _isHomingLaserActive = false;
     }
-
 
 }

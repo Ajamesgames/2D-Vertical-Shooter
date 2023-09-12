@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 637157539356987009}
   m_Layer: 0
   m_Name: Big_Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bigEnemySpeed: 8
-  _descentSpeed: 2
+  _descentSpeed: 4
   _moveLeft: 0
   _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
     type: 3}

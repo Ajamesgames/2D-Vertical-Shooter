@@ -6,23 +6,19 @@ public class BossEnemyLaserbeam : MonoBehaviour
 {
 
     private float _enemySpeed = 4;
-    [SerializeField]
-    private GameObject _laserbeam;
-
-    [SerializeField]
-    private GameObject _explosionPrefab;
-    [SerializeField]
-    private AudioClip _explosionClip;
-
-    private AudioSource _audioSource;
-    private Animator _animator;
     private bool _isLaserbeamReady = false;
     private bool _hasUsedLaserbeam = false;
     [SerializeField]
+    private GameObject _laserbeam;
+    [SerializeField]
+    private GameObject _explosionPrefab;
+    [SerializeField]
     private AudioClip _laserbeamClip;
+    [SerializeField]
+    private AudioClip _explosionClip;
+    private AudioSource _audioSource;
+    private Animator _animator;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         _animator = gameObject.GetComponent<Animator>();
@@ -52,7 +48,6 @@ public class BossEnemyLaserbeam : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         EnemyMovement();
@@ -79,8 +74,6 @@ public class BossEnemyLaserbeam : MonoBehaviour
         {
             StartCoroutine(LaserbeamAttack());
         }
-
-
     }
     IEnumerator LaserbeamAttack()
     {
@@ -90,16 +83,17 @@ public class BossEnemyLaserbeam : MonoBehaviour
         yield return null;
     }
 
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             Player _playerScript = other.GetComponent<Player>();
-
+            if (_playerScript != null)
+            {
+                _playerScript.Damage();
+            }
             _laserbeam.SetActive(false);
             _audioSource.clip = _explosionClip;
-            _playerScript.Damage();
             _animator.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             _enemySpeed = 0;

@@ -7,32 +7,30 @@ public class EnemyD : MonoBehaviour
     [SerializeField]
     private float _enemySpeed = 3f;
     [SerializeField]
+    private float _dodgeMovementSpeed = 6f;
+    private bool _isDead = false;
+    private bool _isShieldActive = false;
+    private bool _detectedTarget = false;
+    private bool _canFireLaser = true;
+    private bool _moveLeft;
+    private bool _moveUp = false;
+    private bool _isDodgingLaser = false;
+    private bool _canDodgeLaser = true;
+    [SerializeField]
     private GameObject _enemySpreadLaserPrefab;
     [SerializeField]
     private GameObject _explosionPrefab;
+    [SerializeField]
+    private GameObject _shieldVisual;
+    [SerializeField]
+    private GameObject _thrusterVisual;
     [SerializeField]
     private AudioClip _explosionClip;
     private AudioSource _audioSource;
     private Player _playerScript;
     private Animator _animator;
     private SpawnManager _spawnManager;
-    [SerializeField]
-    private GameObject _shieldVisual;
-    private bool _isShieldActive = false;
     private BoxCollider2D _playerCollider;
-    private bool _detectedTarget = false;
-    private bool _canFireLaser = true;
-
-    private bool _moveLeft;
-    private bool _moveUp = false;
-    private bool _isDodgingLaser = false;
-    private bool _canDodgeLaser = true;
-    [SerializeField]
-    private float _dodgeMovementSpeed = 6f;
-    [SerializeField]
-    private GameObject _thrusterVisual;
-
-    private bool _isDead = false;
 
     private void Start()
     {
@@ -46,22 +44,18 @@ public class EnemyD : MonoBehaviour
         {
             Debug.Log("player collider is null");
         }
-
         if (_spawnManager == null)
         {
             Debug.Log("Spawn_Manager is null");
         }
-
         if (_playerScript == null)
         {
             Debug.Log("_playerscript is NULL");
         }
-
         if (_animator == null)
         {
             Debug.Log("_animator is NULL");
         }
-
         if (_audioSource == null)
         {
             Debug.Log("Audiosource is null");
@@ -73,15 +67,7 @@ public class EnemyD : MonoBehaviour
 
         ChanceForShield();
 
-        int randomDirection = Random.Range(0, 2);
-        if (randomDirection == 0)
-        {
-            _moveLeft = true;
-        }
-        else if (randomDirection == 1)
-        {
-            _moveLeft = false;
-        }
+        RandomStartDirection();
     }
     void Update()
     {
@@ -99,6 +85,18 @@ public class EnemyD : MonoBehaviour
         {
             _shieldVisual.SetActive(true);
             _isShieldActive = true;
+        }
+    }
+    private void RandomStartDirection()
+    {
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
         }
     }
 
@@ -214,6 +212,7 @@ public class EnemyD : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _thrusterVisual.SetActive(false);
             _isDead = true;
             _shieldVisual.SetActive(false);
             _playerScript.Damage();
@@ -236,6 +235,7 @@ public class EnemyD : MonoBehaviour
             }
             else
             {
+                _thrusterVisual.SetActive(false);
                 _isDead = true;
                 _animator.SetTrigger("OnEnemyDeath");
                 _audioSource.Play();
@@ -251,6 +251,7 @@ public class EnemyD : MonoBehaviour
 
         if (other.CompareTag("Explosion"))
         {
+            _thrusterVisual.SetActive(false);
             _isDead = true;
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");
@@ -265,6 +266,7 @@ public class EnemyD : MonoBehaviour
 
         if (other.CompareTag("Bomb"))
         {
+            _thrusterVisual.SetActive(false);
             _isDead = true;
             _shieldVisual.SetActive(false);
             _animator.SetTrigger("OnEnemyDeath");

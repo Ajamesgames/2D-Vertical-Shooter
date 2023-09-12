@@ -369,5 +369,5 @@ MonoBehaviour:
     type: 3}
   _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
     type: 3}
-  _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
+  _explosionClip: {fileID: 8300000, guid: fc8608dd873bdda46bcc002a9df95088, type: 3}
   _shieldVisual: {fileID: 2849559635735634397}

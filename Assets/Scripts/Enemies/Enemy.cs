@@ -6,7 +6,16 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _enemySpeed = 2.5f;
+    [SerializeField]
+    private float _sideMovementSpeed = 8f;
+    private bool _moveLeft;
+    private bool _detectedTarget = false;
+    private bool _canFireLaser = true;
+    private bool _isDead = false;
+    private bool _isShieldActive = false;
+    private bool _canRamPlayer = false;
     private Vector3 _laserOffset = new Vector3(0, -1, 0);
+    private Vector3 _playerPos;
     [SerializeField]
     private GameObject _enemyLaserPrefab;
     [SerializeField]
@@ -16,25 +25,9 @@ public class Enemy : MonoBehaviour
     private AudioSource _audioSource;
     private Player _playerScript;
     private Animator _animator;
-
-    private bool _moveLeft;
-
-    [SerializeField]
-    private float _sideMovementSpeed = 8f;
-
     private SpawnManager _spawnManager;
-
     private GameObject _shieldVisual;
-    private bool _isShieldActive = false;
-
-    private bool _canRamPlayer = false;
     private BoxCollider2D _playerCollider;
-    private Vector3 _playerPos;
-
-    private bool _detectedTarget = false;
-    private bool _canFireLaser = true;
-
-    private bool _isDead = false;
 
     private void Start()
     {
@@ -81,15 +74,7 @@ public class Enemy : MonoBehaviour
 
         ChanceForShield();
 
-        int randomDirection = Random.Range(0, 2);
-        if (randomDirection == 0)
-        {
-            _moveLeft = true;
-        }
-        else if (randomDirection == 1)
-        {
-            _moveLeft = false;
-        }
+        RandomStartDirection();
     }
     void Update()
     {
@@ -114,6 +99,19 @@ public class Enemy : MonoBehaviour
         {
             _shieldVisual.SetActive(true);
             _isShieldActive = true;
+        }
+    }
+
+    private void RandomStartDirection()
+    {
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
         }
     }
 

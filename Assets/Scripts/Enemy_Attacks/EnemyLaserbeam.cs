@@ -9,6 +9,11 @@ public class EnemyLaserbeam : MonoBehaviour
     void Start()
     {
         _enemyScript = transform.parent.GetComponent<EnemyC>();
+
+        if (_enemyScript == null)
+        {
+            Debug.Log("Enemy script is null");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -16,8 +21,10 @@ public class EnemyLaserbeam : MonoBehaviour
         if(collision.CompareTag("Player"))
         {
             Player _playerScript = collision.GetComponent<Player>();
-
-            _playerScript.Damage();
+            if (_playerScript != null)
+            {
+                _playerScript.Damage();
+            }
             _enemyScript.StopLaserbeamOnHit();
             this.gameObject.SetActive(false);
         }
@@ -26,6 +33,4 @@ public class EnemyLaserbeam : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
-
-
 }

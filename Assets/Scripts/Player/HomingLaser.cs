@@ -15,7 +15,6 @@ public class HomingLaser : MonoBehaviour
     private Vector3 _closestEnemyPos;
     private Quaternion _rotateTarget;
 
-
     private void Start()
     {
         HomingLaserDetection();

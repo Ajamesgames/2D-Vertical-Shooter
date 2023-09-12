@@ -4,34 +4,28 @@ using UnityEngine;
 
 public class EnemyC : MonoBehaviour
 {
-    //this object is rotated 180* on Z axis
-
     [SerializeField]
     private float _enemySpeed = 6f;
+    private bool _firingLaserbeam = false;
+    private bool _hasUsedLaserbeam = false;
+    private bool _isShieldActive = false;
+    private bool _isDead = false;
+    private Vector3 _playerPos;
     [SerializeField]
     private GameObject _explosionPrefab;
     [SerializeField]
+    private GameObject _laserBeam;
+    private GameObject _player;
+    [SerializeField]
+    private GameObject _shieldVisual;
+    [SerializeField]
     private AudioClip _explosionClip;
+    [SerializeField]
+    private AudioClip _laserbeamClip;
     private AudioSource _audioSource;
     private Player _playerScript;
     private Animator _animator;
     private SpawnManager _spawnManager;
-    [SerializeField]
-    private GameObject _shieldVisual;
-    private bool _isShieldActive = false;
-
-    [SerializeField]
-    private GameObject _laserBeam;
-    private GameObject _player;
-    private Vector3 _playerPos;
-    private bool _firingLaserbeam = false;
-    private bool _hasUsedLaserbeam = false;
-    [SerializeField]
-    private AudioClip _laserbeamClip;
-
-    private bool _isDead = false;
-
-
 
     private void Start()
     {
@@ -41,21 +35,22 @@ public class EnemyC : MonoBehaviour
         _animator = gameObject.GetComponent<Animator>();
         _audioSource = gameObject.GetComponent<AudioSource>();
 
+        if (_player == null)
+        {
+            Debug.Log(transform.name + "Couldnt locate player");
+        }
         if (_spawnManager == null)
         {
             Debug.Log("Spawn_Manager is null");
         }
-
         if (_playerScript == null)
         {
             Debug.Log("_playerscript is NULL");
         }
-
         if (_animator == null)
         {
             Debug.Log("_animator is NULL");
         }
-
         if (_audioSource == null)
         {
             Debug.Log("Audiosource is null");
@@ -110,8 +105,6 @@ public class EnemyC : MonoBehaviour
             transform.Translate(Vector3.right * (_enemySpeed /2) * Time.deltaTime);
         }
 
-
-
         if (transform.position.y <= -9)
         {
             float randomX = Random.Range(-5.3f, 5.3f);
@@ -120,12 +113,10 @@ public class EnemyC : MonoBehaviour
 
             _hasUsedLaserbeam = false;
         }
-
     }
 
     IEnumerator LaserbeamAttack()
     {
-
         _firingLaserbeam = true;
         _hasUsedLaserbeam = true;
         _laserBeam.SetActive(true);
@@ -133,14 +124,12 @@ public class EnemyC : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(1f,1.5f));
         _firingLaserbeam = false;
         _laserBeam.SetActive(false);
-
     }
 
     public void StopLaserbeamOnHit()
     {
         _firingLaserbeam = false;
     }
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {

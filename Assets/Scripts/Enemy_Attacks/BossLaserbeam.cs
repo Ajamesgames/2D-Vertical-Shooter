@@ -17,6 +17,5 @@ public class BossLaserbeam : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
-
     }
 }

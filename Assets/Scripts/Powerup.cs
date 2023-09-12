@@ -8,12 +8,10 @@ public class Powerup : MonoBehaviour
     private float _powerupSpeed = 3f;
     [SerializeField] //0 = ammo, 1 = attack, 2 = defense, 3 = life powerup, 4 = bomb, 5 = Slow Down, 6 = homing.
     private int _powerupID;
-    [SerializeField]
-    private AudioClip _powerupClip;
-
     private bool _hasBeenSuckedIn = false;
     private Vector3 _playerPos;
-
+    [SerializeField]
+    private AudioClip _powerupClip;
 
     void Update()
     {

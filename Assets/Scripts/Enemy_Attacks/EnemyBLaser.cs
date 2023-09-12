@@ -6,7 +6,6 @@ public class EnemyBLaser : MonoBehaviour
 {
     [SerializeField]
     private float _laserSpeed = 8f;
-
     private Vector3 _playerPosition;
 
     private void Start()
@@ -49,5 +48,4 @@ public class EnemyBLaser : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
 }

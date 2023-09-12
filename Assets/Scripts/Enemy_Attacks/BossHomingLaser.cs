@@ -11,9 +11,6 @@ public class BossHomingLaser : MonoBehaviour
     private GameObject _player;
     private Vector3 _playerPos;
 
-
-
-
     void Start()
     {
         _player = GameObject.Find("Player");
@@ -24,7 +21,6 @@ public class BossHomingLaser : MonoBehaviour
 
         StartCoroutine(DestroyAfterTime());
     }
-
 
     void Update()
     {

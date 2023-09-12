@@ -10,9 +10,19 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        KeyCommands();
+    }
+
+    public void GameOver()
+    {
+        _isGameover = true;
+    }
+
+    private void KeyCommands()
+    {
         if (Input.GetKeyDown(KeyCode.R) && _isGameover == true)
         {
-            SceneManager.LoadScene(1);  
+            SceneManager.LoadScene(1);
         }
         if (Input.GetKeyDown(KeyCode.M) && _isGameover == true)
         {
@@ -22,12 +32,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
-            UnityEditor.EditorApplication.isPlaying = false;
         }
-    }
-
-    public void GameOver()
-    {
-        _isGameover = true;
     }
 }

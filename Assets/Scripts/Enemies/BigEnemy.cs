@@ -7,29 +7,17 @@ public class BigEnemy : MonoBehaviour
     [SerializeField]
     private float _bigEnemySpeed = 8f;
     [SerializeField]
-    private float _descentSpeed = 2f;
+    private float _descentSpeed = 4f;
     [SerializeField]
     private bool _moveLeft;
     [SerializeField]
     private GameObject _explosionPrefab;
-    private SpawnManager _spawnManager;
-
     [SerializeField]
     private GameObject _ammoPowerup;
-
+    private SpawnManager _spawnManager;
 
     void Start()
     {
-        int randomDirection = Random.Range(0, 2);
-        if (randomDirection == 0)
-        {
-            _moveLeft = true;
-        }
-        else if (randomDirection == 1)
-        {
-            _moveLeft = false;
-        }
-        
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
         if (_spawnManager == null)
@@ -38,9 +26,9 @@ public class BigEnemy : MonoBehaviour
         }
 
         StartCoroutine(SpawnAmmoPowerup());
+        RandomStartDirection();
     }
 
-    // Update is called once per frame
     void Update()
     {
         BigEnemyMovement();
@@ -51,18 +39,29 @@ public class BigEnemy : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(5f);
-            Instantiate(_ammoPowerup, transform.position, Quaternion.identity);
+            Vector3 _spawnOffset = new Vector3(0, -1.5f, 0);
+            Instantiate(_ammoPowerup, (transform.position + _spawnOffset), Quaternion.identity);
+        }
+    }
+    private void RandomStartDirection()
+    {
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
         }
     }
 
-    private void BigEnemyMovement() //moves enemy left and right
+    private void BigEnemyMovement()
     {
         if (transform.position.y > 4f)
         {
             transform.Translate(Vector3.down * _descentSpeed * Time.deltaTime);
         }
-
-
 
         if (transform.position.x >= 5f)
         {
@@ -96,10 +95,13 @@ public class BigEnemy : MonoBehaviour
         {
             Player _playerScript = collision.GetComponent<Player>();
 
+            if (_playerScript != null)
+            {
+                _playerScript.Damage();
+            }
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Instantiate(_ammoPowerup, transform.position, Quaternion.identity);
             _spawnManager.StartSpawning();
-            _playerScript.Damage();
             Destroy(this.gameObject);
         }
 

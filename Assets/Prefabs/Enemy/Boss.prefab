@@ -98,14 +98,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ccb8af3caf5394fa706a9bef3ec2ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifeTotal: 25
+  _lifeTotal: 30
   _explosionPrefab: {fileID: 6836989864555606554, guid: 6b1ce5b5988682741a79adcd55acad6e,
     type: 3}
   _bossAttacks:
   - {fileID: 404689078647670087, guid: 328f9aaf85aa4564dbaf1e663bd5f49b, type: 3}
   - {fileID: 3181915135858311766, guid: 3ec546213bc25004a9d3d9fb12f1bec5, type: 3}
   - {fileID: 840725242641862960, guid: 106c11dc228537644bd91f8c75fcce62, type: 3}
-  _bossHealthUI: {fileID: 0}
+  _bossMusic: {fileID: 8300000, guid: b0c956b5f7e96d64293a438df68826b6, type: 3}
+  _victoryMusic: {fileID: 8300000, guid: bd0ae04724c00f241b9463e9317b1e6c, type: 3}
 --- !u!50 &3452933868636125418
 Rigidbody2D:
   serializedVersion: 4

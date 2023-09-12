@@ -13,22 +13,18 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _restartText;
     [SerializeField]
-    private Image[] _livesImg;
-    [SerializeField]
-    private Slider _thrusterSlider;
-    private GameManager _gameManager;
-
-    [SerializeField]
     private TMP_Text _levelText;
-
+    [SerializeField]
+    private TMP_Text _youWinText;
+    [SerializeField]
+    private Image[] _livesImg;
     [SerializeField]
     private Slider _bossHealthSlider;
     [SerializeField]
-    private TMP_Text _youWinText;
-
-    [SerializeField]
     private Slider _ammoSlider;
-
+    [SerializeField]
+    private Slider _thrusterSlider;
+    private GameManager _gameManager;
 
     void Start()
     {
@@ -40,7 +36,7 @@ public class UIManager : MonoBehaviour
         _restartText.gameObject.SetActive(false);
         _youWinText.gameObject.SetActive(false);
 
-        _scoreText.text = "Score: 0";
+        _scoreText.text = "Score: 00";
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
@@ -50,10 +46,44 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
     public void UpdateScore(int playerScore)
     {
         _scoreText.text = "Score: " + playerScore;
+    }
+    public void LevelTextUpdate(int waveCount)
+    {
+        _levelText.gameObject.SetActive(true);
+        _levelText.text = "Level: " + waveCount;
+        StartCoroutine(LevelTextTurnOff());
+    }
+
+    IEnumerator LevelTextTurnOff()
+    {
+        yield return new WaitForSeconds(3f);
+        _levelText.gameObject.SetActive(false);
+    }
+
+    public void UpdateAmmo(int ammoCount)
+    {
+        _ammoSlider.value = ammoCount;
+    }
+    public void ThrusterSliderUpdate(float thrusterValue)
+    {
+        _thrusterSlider.value = thrusterValue;
+    }
+    public void BossHealthSliderUpdate(int bossHealth)
+    {
+        _bossHealthSlider.value = bossHealth;
+    }
+
+    public void BossHealthAppear()
+    {
+        _bossHealthSlider.gameObject.SetActive(true);
+    }
+
+    public void BossHealthDisappear()
+    {
+        _bossHealthSlider.gameObject.SetActive(false);
     }
 
     public void UpdateLives(int currentLives)
@@ -84,11 +114,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateAmmo(int ammoCount)
-    {
-        _ammoSlider.value = ammoCount;
-    }
-
     private void GameOverSequence()
     {
         _livesImg[0].gameObject.SetActive(false);
@@ -108,39 +133,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ThrusterSliderUpdate(float thrusterValue)
-    {
-        _thrusterSlider.value = thrusterValue;
-    }
-
-    public void LevelTextUpdate(int waveCount)
-    {
-        _levelText.gameObject.SetActive(true);
-        _levelText.text = "Level: " + waveCount;
-        StartCoroutine(LevelTextTurnOff());
-    }
-
-    IEnumerator LevelTextTurnOff()
-    {
-        yield return new WaitForSeconds(3f);
-        _levelText.gameObject.SetActive(false);
-    }
-
-    public void BossHealthSliderUpdate(int bossHealth)
-    {
-        _bossHealthSlider.value = bossHealth;
-    }
-
-    public void BossHealthAppear()
-    {
-        _bossHealthSlider.gameObject.SetActive(true);
-    }
-
-    public void BossHealthDisappear()
-    {
-        _bossHealthSlider.gameObject.SetActive(false);
-    }
-
     public void YouWinScreen()
     {
         StartCoroutine(YouWinFlicker());
@@ -158,5 +150,4 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
     }
-
 }

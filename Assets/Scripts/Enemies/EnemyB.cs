@@ -8,27 +8,24 @@ public class EnemyB : MonoBehaviour
     private float _enemySpeed = 4f;
     private float _fireRate = 3f;
     private float _canFire = 0f;
+    private bool _moveLeft;
+    private bool _moveDown;
+    private bool _moveSideways;
+    private bool _isShieldActive = false;
+    private bool _isDead = false;
     private Vector3 _laserOffset = new Vector3(0, -1, 0);
     [SerializeField]
     private GameObject _enemyBLaserPrefab;
     [SerializeField]
     private GameObject _explosionPrefab;
     [SerializeField]
+    private GameObject _shieldVisual;
+    [SerializeField]
     private AudioClip _explosionClip;
     private AudioSource _audioSource;
     private Player _playerScript;
     private Animator _animator;
     private SpawnManager _spawnManager;
-
-    private bool _moveLeft;
-    private bool _moveDown;
-    private bool _moveSideways;
-
-    [SerializeField]
-    private GameObject _shieldVisual;
-    private bool _isShieldActive = false;
-
-    private bool _isDead = false;
 
     private void Start()
     {
@@ -61,19 +58,11 @@ public class EnemyB : MonoBehaviour
             _audioSource.clip = _explosionClip;
         }
 
-        StartCoroutine(SnakeMovement());
-
         ChanceForShield();
 
-        int randomDirection = Random.Range(0, 2);
-        if (randomDirection == 0)
-        {
-            _moveLeft = true;
-        }
-        else if (randomDirection == 1)
-        {
-            _moveLeft = false;
-        }
+        RandomStartDirection();
+
+        StartCoroutine(SnakeMovement());
     }
 
     void Update()
@@ -92,6 +81,19 @@ public class EnemyB : MonoBehaviour
         {
             _shieldVisual.SetActive(true);
             _isShieldActive = true;
+        }
+    }
+
+    private void RandomStartDirection()
+    {
+        int randomDirection = Random.Range(0, 2);
+        if (randomDirection == 0)
+        {
+            _moveLeft = true;
+        }
+        else if (randomDirection == 1)
+        {
+            _moveLeft = false;
         }
     }
 
