@@ -84,7 +84,7 @@ public class Boss : MonoBehaviour
         _uiManagerScript.BossHealthAppear();
         _startBossAttacks = true;
         _fightStarted = true;
-        _gameMusic.volume = 0.8f;
+        _gameMusic.volume = 1f;
         _gameMusic.clip = _bossMusic;
         _gameMusic.Play();
     }
