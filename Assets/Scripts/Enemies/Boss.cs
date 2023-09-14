@@ -189,6 +189,7 @@ public class Boss : MonoBehaviour
         if (_lifeTotal == 0)
         {
             _gameMusic.Stop();
+            _gameMusic.volume = 0.7f;
             _gameMusic.clip = _victoryMusic;
             _gameMusic.Play();
             _fightStarted = false;

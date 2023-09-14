@@ -62,6 +62,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _mainCamera;
     [SerializeField]
+    private GameObject _explosionPrefab;
+    [SerializeField]
     private AudioClip _laserSoundClip;
     [SerializeField]
     private AudioClip _outOfAmmoClip;
@@ -310,7 +312,7 @@ public class Player : MonoBehaviour
         if (_lives == 0)
         {
             _spawnManager.OnPlayerDeath();
-
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
 
